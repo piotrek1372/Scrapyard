@@ -1,0 +1,53 @@
+{
+    "game": {
+        "title": "Ferro-velho",
+        "overlooking": "--- Observando o ferro-velho ---"
+    },
+    "loot": {
+        "found": "Você encontrou: {name} | Modelo: {model}",
+        "empty": "Nada útil por aqui..."
+    },
+    "ui": {
+        "loot_button": "Procurar!",
+        "search_again": "Procurar de novo",
+        "back": "Voltar",
+        "item_value": "Valor: ${value}",
+        "item_condition": "Condição: {condition}%",
+        "item_category": "Categoria: {category}",
+        "no_model": "[Sem modelo 3D]",
+        "language": "Idioma: {lang}",
+        "quit": "Sair"
+    },
+    "items": {
+        "Rusty Radiator": "Radiador enferrujado",
+        "Seized Piston": "Pistão travado",
+        "Bent Crankshaft": "Virabrequim torto",
+        "Oil-Stained Gearbox": "Caixa de câmbio manchada de óleo",
+        "Cracked Engine Block": "Bloco do motor rachado",
+        "Fried Motherboard": "Placa-mãe queimada",
+        "Flickering Vacuum Tube": "Válvula termiônica piscante",
+        "Tangled Wire Harness": "Chicote de fios emaranhado",
+        "Burnt Capacitor": "Capacitor queimado",
+        "Dented Fender": "Para-lama amassado",
+        "Shattered Windshield": "Para-brisa estilhaçado",
+        "Corroded Exhaust Pipe": "Cano de escapamento corroído",
+        "Bald Tire": "Pneu careca",
+        "Vintage Radio Knob": "Botão de rádio vintage",
+        "Antique Brass Valve": "Válvula de latão antiga"
+    },
+    "categories": {
+        "Mechanical": "Mecânica",
+        "Electronics": "Eletrônica",
+        "Body": "Carroceria",
+        "Unique": "Único"
+    },
+    "inventory": {
+        "full": "Inventário cheio!",
+        "added": "{item} adicionado ao inventário",
+        "removed": "{item} removido do inventário"
+    },
+    "player": {
+        "balance": "Saldo: {amount}",
+        "free_loots": "Saques grátis restantes: {count}"
+    }
+}

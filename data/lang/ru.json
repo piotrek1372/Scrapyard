@@ -1,0 +1,53 @@
+{
+    "game": {
+        "title": "Свалка",
+        "overlooking": "--- Осматриваем свалку ---"
+    },
+    "loot": {
+        "found": "Найдено: {name} | Модель: {model}",
+        "empty": "Тут ничего полезного..."
+    },
+    "ui": {
+        "loot_button": "Искать!",
+        "search_again": "Искать ещё",
+        "back": "Назад",
+        "item_value": "Ценность: ${value}",
+        "item_condition": "Состояние: {condition}%",
+        "item_category": "Категория: {category}",
+        "no_model": "[Нет 3D-модели]",
+        "language": "Язык: {lang}",
+        "quit": "Выход"
+    },
+    "items": {
+        "Rusty Radiator": "Ржавый радиатор",
+        "Seized Piston": "Заклинивший поршень",
+        "Bent Crankshaft": "Погнутый коленвал",
+        "Oil-Stained Gearbox": "Замасленная коробка передач",
+        "Cracked Engine Block": "Треснувший блок двигателя",
+        "Fried Motherboard": "Сгоревшая материнская плата",
+        "Flickering Vacuum Tube": "Мерцающая вакуумная лампа",
+        "Tangled Wire Harness": "Запутанный жгут проводов",
+        "Burnt Capacitor": "Сгоревший конденсатор",
+        "Dented Fender": "Помятое крыло",
+        "Shattered Windshield": "Разбитое лобовое стекло",
+        "Corroded Exhaust Pipe": "Проржавевшая выхлопная труба",
+        "Bald Tire": "Лысая шина",
+        "Vintage Radio Knob": "Винтажная ручка радио",
+        "Antique Brass Valve": "Старинный латунный клапан"
+    },
+    "categories": {
+        "Mechanical": "Механика",
+        "Electronics": "Электроника",
+        "Body": "Кузов",
+        "Unique": "Уникальное"
+    },
+    "inventory": {
+        "full": "Инвентарь полон!",
+        "added": "{item} добавлен в инвентарь",
+        "removed": "{item} убран из инвентаря"
+    },
+    "player": {
+        "balance": "Баланс: {amount}",
+        "free_loots": "Осталось бесплатных вылазок: {count}"
+    }
+}

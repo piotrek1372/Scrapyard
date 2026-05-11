@@ -1,0 +1,53 @@
+{
+    "game": {
+        "title": "Rottamazione",
+        "overlooking": "--- Sguardo sulla discarica ---"
+    },
+    "loot": {
+        "found": "Trovato: {name} | Modello: {model}",
+        "empty": "Niente di utile qui..."
+    },
+    "ui": {
+        "loot_button": "Cerca!",
+        "search_again": "Cerca ancora",
+        "back": "Indietro",
+        "item_value": "Valore: ${value}",
+        "item_condition": "Condizione: {condition}%",
+        "item_category": "Categoria: {category}",
+        "no_model": "[Nessun modello 3D]",
+        "language": "Lingua: {lang}",
+        "quit": "Esci"
+    },
+    "items": {
+        "Rusty Radiator": "Radiatore arrugginito",
+        "Seized Piston": "Pistone grippato",
+        "Bent Crankshaft": "Albero motore piegato",
+        "Oil-Stained Gearbox": "Cambio macchiato d'olio",
+        "Cracked Engine Block": "Blocco motore crepato",
+        "Fried Motherboard": "Scheda madre bruciata",
+        "Flickering Vacuum Tube": "Valvola termoionica tremolante",
+        "Tangled Wire Harness": "Cablaggio aggrovigliato",
+        "Burnt Capacitor": "Condensatore bruciato",
+        "Dented Fender": "Parafango ammaccato",
+        "Shattered Windshield": "Parabrezza frantumato",
+        "Corroded Exhaust Pipe": "Tubo di scarico corroso",
+        "Bald Tire": "Pneumatico liscio",
+        "Vintage Radio Knob": "Manopola radio vintage",
+        "Antique Brass Valve": "Valvola in ottone antica"
+    },
+    "categories": {
+        "Mechanical": "Meccanica",
+        "Electronics": "Elettronica",
+        "Body": "Carrozzeria",
+        "Unique": "Unico"
+    },
+    "inventory": {
+        "full": "Inventario pieno!",
+        "added": "{item} aggiunto all'inventario",
+        "removed": "{item} rimosso dall'inventario"
+    },
+    "player": {
+        "balance": "Saldo: {amount}",
+        "free_loots": "Saccheggi gratuiti rimanenti: {count}"
+    }
+}

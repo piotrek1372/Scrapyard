@@ -1,0 +1,53 @@
+{
+    "game": {
+        "title": "废车场",
+        "overlooking": "--- 俯瞰废车场 ---"
+    },
+    "loot": {
+        "found": "你找到了：{name} | 模型：{model}",
+        "empty": "这里没有有用的东西..."
+    },
+    "ui": {
+        "loot_button": "搜索！",
+        "search_again": "继续搜索",
+        "back": "返回",
+        "item_value": "价值：${value}",
+        "item_condition": "状况：{condition}%",
+        "item_category": "类别：{category}",
+        "no_model": "[无3D模型]",
+        "language": "语言：{lang}",
+        "quit": "退出"
+    },
+    "items": {
+        "Rusty Radiator": "生锈的散热器",
+        "Seized Piston": "卡死的活塞",
+        "Bent Crankshaft": "弯曲的曲轴",
+        "Oil-Stained Gearbox": "油污变速箱",
+        "Cracked Engine Block": "裂开的发动机缸体",
+        "Fried Motherboard": "烧毁的主板",
+        "Flickering Vacuum Tube": "闪烁的真空管",
+        "Tangled Wire Harness": "缠绕的线束",
+        "Burnt Capacitor": "烧毁的电容器",
+        "Dented Fender": "凹陷的挡泥板",
+        "Shattered Windshield": "破碎的挡风玻璃",
+        "Corroded Exhaust Pipe": "腐蚀的排气管",
+        "Bald Tire": "磨光的轮胎",
+        "Vintage Radio Knob": "复古收音机旋钮",
+        "Antique Brass Valve": "古董黄铜阀门"
+    },
+    "categories": {
+        "Mechanical": "机械",
+        "Electronics": "电子",
+        "Body": "车身",
+        "Unique": "独特"
+    },
+    "inventory": {
+        "full": "库存已满！",
+        "added": "{item} 已添加到库存",
+        "removed": "{item} 已从库存移除"
+    },
+    "player": {
+        "balance": "余额：{amount}",
+        "free_loots": "剩余免费搜刮次数：{count}"
+    }
+}

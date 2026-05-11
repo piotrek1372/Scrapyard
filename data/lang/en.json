@@ -1,0 +1,53 @@
+{
+    "game": {
+        "title": "Scrapyard",
+        "overlooking": "--- Overlooking scrapyard ---"
+    },
+    "loot": {
+        "found": "You found: {name} | Model: {model}",
+        "empty": "Nothing useful here..."
+    },
+    "ui": {
+        "loot_button": "Search!",
+        "search_again": "Search Again",
+        "back": "Back",
+        "item_value": "Value: ${value}",
+        "item_condition": "Condition: {condition}%",
+        "item_category": "Category: {category}",
+        "no_model": "[No 3D model]",
+        "language": "Language: {lang}",
+        "quit": "Quit"
+    },
+    "items": {
+        "Rusty Radiator": "Rusty Radiator",
+        "Seized Piston": "Seized Piston",
+        "Bent Crankshaft": "Bent Crankshaft",
+        "Oil-Stained Gearbox": "Oil-Stained Gearbox",
+        "Cracked Engine Block": "Cracked Engine Block",
+        "Fried Motherboard": "Fried Motherboard",
+        "Flickering Vacuum Tube": "Flickering Vacuum Tube",
+        "Tangled Wire Harness": "Tangled Wire Harness",
+        "Burnt Capacitor": "Burnt Capacitor",
+        "Dented Fender": "Dented Fender",
+        "Shattered Windshield": "Shattered Windshield",
+        "Corroded Exhaust Pipe": "Corroded Exhaust Pipe",
+        "Bald Tire": "Bald Tire",
+        "Vintage Radio Knob": "Vintage Radio Knob",
+        "Antique Brass Valve": "Antique Brass Valve"
+    },
+    "categories": {
+        "Mechanical": "Mechanical",
+        "Electronics": "Electronics",
+        "Body": "Body",
+        "Unique": "Unique"
+    },
+    "inventory": {
+        "full": "Inventory is full!",
+        "added": "{item} added to inventory",
+        "removed": "{item} removed from inventory"
+    },
+    "player": {
+        "balance": "Balance: {amount}",
+        "free_loots": "Free loots remaining: {count}"
+    }
+}

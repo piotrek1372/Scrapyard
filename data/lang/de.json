@@ -1,0 +1,53 @@
+{
+    "game": {
+        "title": "Schrottplatz",
+        "overlooking": "--- Blick über den Schrottplatz ---"
+    },
+    "loot": {
+        "found": "Gefunden: {name} | Modell: {model}",
+        "empty": "Hier gibt es nichts Brauchbares..."
+    },
+    "ui": {
+        "loot_button": "Suchen!",
+        "search_again": "Erneut suchen",
+        "back": "Zurück",
+        "item_value": "Wert: ${value}",
+        "item_condition": "Zustand: {condition}%",
+        "item_category": "Kategorie: {category}",
+        "no_model": "[Kein 3D-Modell]",
+        "language": "Sprache: {lang}",
+        "quit": "Beenden"
+    },
+    "items": {
+        "Rusty Radiator": "Rostiger Kühler",
+        "Seized Piston": "Festgefressener Kolben",
+        "Bent Crankshaft": "Verbogene Kurbelwelle",
+        "Oil-Stained Gearbox": "Ölverschmiertes Getriebe",
+        "Cracked Engine Block": "Gerissener Motorblock",
+        "Fried Motherboard": "Durchgebrannte Hauptplatine",
+        "Flickering Vacuum Tube": "Flackernde Vakuumröhre",
+        "Tangled Wire Harness": "Verknoteter Kabelbaum",
+        "Burnt Capacitor": "Durchgebrannter Kondensator",
+        "Dented Fender": "Verbeulter Kotflügel",
+        "Shattered Windshield": "Zerbrochene Windschutzscheibe",
+        "Corroded Exhaust Pipe": "Korrodiertes Auspuffrohr",
+        "Bald Tire": "Abgefahrener Reifen",
+        "Vintage Radio Knob": "Vintage-Radioknopf",
+        "Antique Brass Valve": "Antikes Messingventil"
+    },
+    "categories": {
+        "Mechanical": "Mechanik",
+        "Electronics": "Elektronik",
+        "Body": "Karosserie",
+        "Unique": "Einzigartig"
+    },
+    "inventory": {
+        "full": "Inventar voll!",
+        "added": "{item} zum Inventar hinzugefügt",
+        "removed": "{item} aus dem Inventar entfernt"
+    },
+    "player": {
+        "balance": "Guthaben: {amount}",
+        "free_loots": "Verbleibende Gratisplünderungen: {count}"
+    }
+}

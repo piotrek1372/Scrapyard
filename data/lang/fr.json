@@ -1,0 +1,53 @@
+{
+    "game": {
+        "title": "Casse auto",
+        "overlooking": "--- Vue sur la casse ---"
+    },
+    "loot": {
+        "found": "Trouvé : {name} | Modèle : {model}",
+        "empty": "Rien d'utile ici..."
+    },
+    "ui": {
+        "loot_button": "Chercher !",
+        "search_again": "Chercher encore",
+        "back": "Retour",
+        "item_value": "Valeur : ${value}",
+        "item_condition": "État : {condition}%",
+        "item_category": "Catégorie : {category}",
+        "no_model": "[Pas de modèle 3D]",
+        "language": "Langue : {lang}",
+        "quit": "Quitter"
+    },
+    "items": {
+        "Rusty Radiator": "Radiateur rouillé",
+        "Seized Piston": "Piston grippé",
+        "Bent Crankshaft": "Vilebrequin tordu",
+        "Oil-Stained Gearbox": "Boîte de vitesses tachée d'huile",
+        "Cracked Engine Block": "Bloc moteur fissuré",
+        "Fried Motherboard": "Carte mère grillée",
+        "Flickering Vacuum Tube": "Tube à vide vacillant",
+        "Tangled Wire Harness": "Faisceau de câbles emmêlé",
+        "Burnt Capacitor": "Condensateur brûlé",
+        "Dented Fender": "Aile cabossée",
+        "Shattered Windshield": "Pare-brise brisé",
+        "Corroded Exhaust Pipe": "Tuyau d'échappement corrodé",
+        "Bald Tire": "Pneu lisse",
+        "Vintage Radio Knob": "Bouton de radio vintage",
+        "Antique Brass Valve": "Valve en laiton antique"
+    },
+    "categories": {
+        "Mechanical": "Mécanique",
+        "Electronics": "Électronique",
+        "Body": "Carrosserie",
+        "Unique": "Unique"
+    },
+    "inventory": {
+        "full": "Inventaire plein !",
+        "added": "{item} ajouté à l'inventaire",
+        "removed": "{item} retiré de l'inventaire"
+    },
+    "player": {
+        "balance": "Solde : {amount}",
+        "free_loots": "Pillages gratuits restants : {count}"
+    }
+}

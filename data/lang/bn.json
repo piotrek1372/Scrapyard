@@ -1,0 +1,53 @@
+{
+    "game": {
+        "title": "ভাঙাড়ি দোকান",
+        "overlooking": "--- ভাঙাড়ি দোকানে নজর ---"
+    },
+    "loot": {
+        "found": "আপনি পেয়েছেন: {name} | মডেল: {model}",
+        "empty": "এখানে কিছু কাজের নেই..."
+    },
+    "ui": {
+        "loot_button": "খোঁজো!",
+        "search_again": "আবার খোঁজো",
+        "back": "ফিরে যাও",
+        "item_value": "মূল্য: ${value}",
+        "item_condition": "অবস্থা: {condition}%",
+        "item_category": "বিভাগ: {category}",
+        "no_model": "[কোনো 3D মডেল নেই]",
+        "language": "ভাষা: {lang}",
+        "quit": "প্রস্থান"
+    },
+    "items": {
+        "Rusty Radiator": "মরচে ধরা রেডিয়েটর",
+        "Seized Piston": "আটকে যাওয়া পিস্টন",
+        "Bent Crankshaft": "বাঁকা ক্র্যাঙ্কশ্যাফ্ট",
+        "Oil-Stained Gearbox": "তেলমাখা গিয়ারবক্স",
+        "Cracked Engine Block": "ফাটা ইঞ্জিন ব্লক",
+        "Fried Motherboard": "পোড়া মাদারবোর্ড",
+        "Flickering Vacuum Tube": "মিটমিটে ভ্যাকুয়াম টিউব",
+        "Tangled Wire Harness": "জট পাকানো তার হার্নেস",
+        "Burnt Capacitor": "পোড়া ক্যাপাসিটর",
+        "Dented Fender": "বাঁকানো ফেন্ডার",
+        "Shattered Windshield": "ভাঙা উইন্ডশিল্ড",
+        "Corroded Exhaust Pipe": "ক্ষয়ে যাওয়া এক্সজস্ট পাইপ",
+        "Bald Tire": "ক্ষয়ে যাওয়া টায়ার",
+        "Vintage Radio Knob": "পুরোনো রেডিও নব",
+        "Antique Brass Valve": "প্রাচীন পিতলের ভালভ"
+    },
+    "categories": {
+        "Mechanical": "যান্ত্রিক",
+        "Electronics": "ইলেকট্রনিক্স",
+        "Body": "বডি",
+        "Unique": "অনন্য"
+    },
+    "inventory": {
+        "full": "ইনভেন্টরি পূর্ণ!",
+        "added": "{item} ইনভেন্টরিতে যোগ হয়েছে",
+        "removed": "{item} ইনভেন্টরি থেকে সরানো হয়েছে"
+    },
+    "player": {
+        "balance": "ব্যালেন্স: {amount}",
+        "free_loots": "অবশিষ্ট ফ্রি লুট: {count}"
+    }
+}

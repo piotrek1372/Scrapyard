@@ -1,0 +1,53 @@
+{
+    "game": {
+        "title": "고물상",
+        "overlooking": "--- 고물상을 둘러보는 중 ---"
+    },
+    "loot": {
+        "found": "발견: {name} | 모델: {model}",
+        "empty": "여기엔 쓸만한 게 없다..."
+    },
+    "ui": {
+        "loot_button": "탐색!",
+        "search_again": "다시 탐색",
+        "back": "돌아가기",
+        "item_value": "가치: ${value}",
+        "item_condition": "상태: {condition}%",
+        "item_category": "분류: {category}",
+        "no_model": "[3D 모델 없음]",
+        "language": "언어: {lang}",
+        "quit": "종료"
+    },
+    "items": {
+        "Rusty Radiator": "녹슨 라디에이터",
+        "Seized Piston": "고착된 피스톤",
+        "Bent Crankshaft": "휘어진 크랭크축",
+        "Oil-Stained Gearbox": "기름때 낀 기어박스",
+        "Cracked Engine Block": "금 간 엔진 블록",
+        "Fried Motherboard": "타버린 메인보드",
+        "Flickering Vacuum Tube": "깜빡이는 진공관",
+        "Tangled Wire Harness": "엉킨 와이어 하네스",
+        "Burnt Capacitor": "탄 커패시터",
+        "Dented Fender": "찌그러진 펜더",
+        "Shattered Windshield": "깨진 앞유리",
+        "Corroded Exhaust Pipe": "부식된 배기관",
+        "Bald Tire": "마모된 타이어",
+        "Vintage Radio Knob": "빈티지 라디오 손잡이",
+        "Antique Brass Valve": "골동품 황동 밸브"
+    },
+    "categories": {
+        "Mechanical": "기계",
+        "Electronics": "전자",
+        "Body": "차체",
+        "Unique": "유니크"
+    },
+    "inventory": {
+        "full": "인벤토리가 가득 찼습니다!",
+        "added": "{item}이(가) 인벤토리에 추가되었습니다",
+        "removed": "{item}이(가) 인벤토리에서 제거되었습니다"
+    },
+    "player": {
+        "balance": "잔액: {amount}",
+        "free_loots": "남은 무료 루팅: {count}"
+    }
+}

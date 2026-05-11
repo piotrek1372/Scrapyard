@@ -1,0 +1,53 @@
+{
+    "game": {
+        "title": "Złomowisko",
+        "overlooking": "--- Rozglądasz się po złomowisku ---"
+    },
+    "loot": {
+        "found": "Znaleziono: {name} | Model: {model}",
+        "empty": "Nic przydatnego w pobliżu..."
+    },
+    "ui": {
+        "loot_button": "Szukaj!",
+        "search_again": "Szukaj dalej",
+        "back": "Powrót",
+        "item_value": "Wartość: ${value}",
+        "item_condition": "Stan: {condition}%",
+        "item_category": "Kategoria: {category}",
+        "no_model": "[Brak modelu 3D]",
+        "language": "Język: {lang}",
+        "quit": "Wyjdź"
+    },
+    "items": {
+        "Rusty Radiator": "Zardzewiała chłodnica",
+        "Seized Piston": "Zatarty tłok",
+        "Bent Crankshaft": "Wygięty wał korbowy",
+        "Oil-Stained Gearbox": "Skrzynia biegów zalana olejem",
+        "Cracked Engine Block": "Pęknięty blok silnika",
+        "Fried Motherboard": "Spalona płyta główna",
+        "Flickering Vacuum Tube": "Migocząca lampa próżniowa",
+        "Tangled Wire Harness": "Splątana wiązka przewodów",
+        "Burnt Capacitor": "Spalony kondensator",
+        "Dented Fender": "Wgnieciony błotnik",
+        "Shattered Windshield": "Rozbita szyba przednia",
+        "Corroded Exhaust Pipe": "Skorodowana rura wydechowa",
+        "Bald Tire": "Łysa opona",
+        "Vintage Radio Knob": "Zabytkowy gałka radia",
+        "Antique Brass Valve": "Antyczny mosiężny zawór"
+    },
+    "categories": {
+        "Mechanical": "Mechaniczne",
+        "Electronics": "Elektronika",
+        "Body": "Karoseria",
+        "Unique": "Unikalne"
+    },
+    "inventory": {
+        "full": "Ekwipunek pełny!",
+        "added": "{item} dodano do ekwipunku",
+        "removed": "{item} usunięto z ekwipunku"
+    },
+    "player": {
+        "balance": "Saldo: {amount}",
+        "free_loots": "Pozostałe darmowe przeszukania: {count}"
+    }
+}

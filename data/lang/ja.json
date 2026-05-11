@@ -1,0 +1,53 @@
+{
+    "game": {
+        "title": "廃車場",
+        "overlooking": "--- 廃車場を見渡す ---"
+    },
+    "loot": {
+        "found": "発見：{name} | モデル：{model}",
+        "empty": "ここには使えるものがない..."
+    },
+    "ui": {
+        "loot_button": "探す！",
+        "search_again": "もう一度探す",
+        "back": "戻る",
+        "item_value": "価値：${value}",
+        "item_condition": "状態：{condition}%",
+        "item_category": "カテゴリ：{category}",
+        "no_model": "[3Dモデルなし]",
+        "language": "言語：{lang}",
+        "quit": "終了"
+    },
+    "items": {
+        "Rusty Radiator": "錆びたラジエーター",
+        "Seized Piston": "固着したピストン",
+        "Bent Crankshaft": "曲がったクランクシャフト",
+        "Oil-Stained Gearbox": "油まみれのギアボックス",
+        "Cracked Engine Block": "ひび割れたエンジンブロック",
+        "Fried Motherboard": "焼けたマザーボード",
+        "Flickering Vacuum Tube": "点滅する真空管",
+        "Tangled Wire Harness": "絡まったワイヤーハーネス",
+        "Burnt Capacitor": "焼けたコンデンサ",
+        "Dented Fender": "へこんだフェンダー",
+        "Shattered Windshield": "砕けたフロントガラス",
+        "Corroded Exhaust Pipe": "腐食した排気管",
+        "Bald Tire": "すり減ったタイヤ",
+        "Vintage Radio Knob": "ヴィンテージラジオのノブ",
+        "Antique Brass Valve": "アンティーク真鍮バルブ"
+    },
+    "categories": {
+        "Mechanical": "機械",
+        "Electronics": "電子部品",
+        "Body": "ボディ",
+        "Unique": "ユニーク"
+    },
+    "inventory": {
+        "full": "インベントリがいっぱいです！",
+        "added": "{item} がインベントリに追加されました",
+        "removed": "{item} がインベントリから削除されました"
+    },
+    "player": {
+        "balance": "残高：{amount}",
+        "free_loots": "残りの無料ルート：{count}"
+    }
+}

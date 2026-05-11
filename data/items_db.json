@@ -1,0 +1,107 @@
+[
+    {
+        "name": "Rusty Radiator",
+        "base_value": 45,
+        "base_condition": 0.4,
+        "category": "Mechanical",
+        "model": "rusty_radiator.glb"
+    },
+    {
+        "name": "Seized Piston",
+        "base_value": 30,
+        "base_condition": 0.2,
+        "category": "Mechanical",
+        "model": null
+    },
+    {
+        "name": "Bent Crankshaft",
+        "base_value": 80,
+        "base_condition": 0.3,
+        "category": "Mechanical",
+        "model": null
+    },
+    {
+        "name": "Oil-Stained Gearbox",
+        "base_value": 120,
+        "base_condition": 0.5,
+        "category": "Mechanical",
+        "model": "rusty_gearbox.glb"
+    },
+    {
+        "name": "Cracked Engine Block",
+        "base_value": 250,
+        "base_condition": 0.2,
+        "category": "Mechanical",
+        "model": null
+    },
+    {
+        "name": "Fried Motherboard",
+        "base_value": 60,
+        "base_condition": 0.1,
+        "category": "Electronics",
+        "model": null
+    },
+    {
+        "name": "Flickering Vacuum Tube",
+        "base_value": 150,
+        "base_condition": 0.6,
+        "category": "Electronics",
+        "model": null
+    },
+    {
+        "name": "Tangled Wire Harness",
+        "base_value": 25,
+        "base_condition": 0.7,
+        "category": "Electronics",
+        "model": null
+    },
+    {
+        "name": "Burnt Capacitor",
+        "base_value": 10,
+        "base_condition": 0.1,
+        "category": "Electronics",
+        "model": null
+    },
+    {
+        "name": "Dented Fender",
+        "base_value": 40,
+        "base_condition": 0.6,
+        "category": "Body",
+        "model": null
+    },
+    {
+        "name": "Shattered Windshield",
+        "base_value": 35,
+        "base_condition": 0.1,
+        "category": "Body",
+        "model": null
+    },
+    {
+        "name": "Corroded Exhaust Pipe",
+        "base_value": 50,
+        "base_condition": 0.3,
+        "category": "Body",
+        "model": null
+    },
+    {
+        "name": "Bald Tire",
+        "base_value": 15,
+        "base_condition": 0.2,
+        "category": "Body",
+        "model": null
+    },
+    {
+        "name": "Vintage Radio Knob",
+        "base_value": 90,
+        "base_condition": 0.8,
+        "category": "Unique",
+        "model": null
+    },
+    {
+        "name": "Antique Brass Valve",
+        "base_value": 110,
+        "base_condition": 0.7,
+        "category": "Unique",
+        "model": null
+    }
+]

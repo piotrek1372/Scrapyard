@@ -1,0 +1,53 @@
+{
+    "game": {
+        "title": "Hurdalık",
+        "overlooking": "--- Hurdalığa bakış ---"
+    },
+    "loot": {
+        "found": "Buldunuz: {name} | Model: {model}",
+        "empty": "Burada işe yarar bir şey yok..."
+    },
+    "ui": {
+        "loot_button": "Ara!",
+        "search_again": "Tekrar ara",
+        "back": "Geri",
+        "item_value": "Değer: ${value}",
+        "item_condition": "Durum: {condition}%",
+        "item_category": "Kategori: {category}",
+        "no_model": "[3D model yok]",
+        "language": "Dil: {lang}",
+        "quit": "Çıkış"
+    },
+    "items": {
+        "Rusty Radiator": "Paslı radyatör",
+        "Seized Piston": "Tutukluk yapan piston",
+        "Bent Crankshaft": "Eğilmiş krank mili",
+        "Oil-Stained Gearbox": "Yağ lekeli vites kutusu",
+        "Cracked Engine Block": "Çatlak motor bloğu",
+        "Fried Motherboard": "Yanmış anakart",
+        "Flickering Vacuum Tube": "Titreyen vakum tüpü",
+        "Tangled Wire Harness": "Dolaşmış kablo demeti",
+        "Burnt Capacitor": "Yanmış kapasitör",
+        "Dented Fender": "Ezilmiş çamurluk",
+        "Shattered Windshield": "Kırılmış ön cam",
+        "Corroded Exhaust Pipe": "Paslanmış egzoz borusu",
+        "Bald Tire": "Aşınmış lastik",
+        "Vintage Radio Knob": "Vintage radyo düğmesi",
+        "Antique Brass Valve": "Antika pirinç valf"
+    },
+    "categories": {
+        "Mechanical": "Mekanik",
+        "Electronics": "Elektronik",
+        "Body": "Gövde",
+        "Unique": "Benzersiz"
+    },
+    "inventory": {
+        "full": "Envanter dolu!",
+        "added": "{item} envantere eklendi",
+        "removed": "{item} envanterden çıkarıldı"
+    },
+    "player": {
+        "balance": "Bakiye: {amount}",
+        "free_loots": "Kalan ücretsiz yağma: {count}"
+    }
+}

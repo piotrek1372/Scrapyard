@@ -1,0 +1,53 @@
+{
+    "game": {
+        "title": "Desguace",
+        "overlooking": "--- Observando el desguace ---"
+    },
+    "loot": {
+        "found": "Encontraste: {name} | Modelo: {model}",
+        "empty": "Nada útil por aquí..."
+    },
+    "ui": {
+        "loot_button": "¡Buscar!",
+        "search_again": "Buscar de nuevo",
+        "back": "Volver",
+        "item_value": "Valor: ${value}",
+        "item_condition": "Estado: {condition}%",
+        "item_category": "Categoría: {category}",
+        "no_model": "[Sin modelo 3D]",
+        "language": "Idioma: {lang}",
+        "quit": "Salir"
+    },
+    "items": {
+        "Rusty Radiator": "Radiador oxidado",
+        "Seized Piston": "Pistón agarrotado",
+        "Bent Crankshaft": "Cigüeñal doblado",
+        "Oil-Stained Gearbox": "Caja de cambios manchada de aceite",
+        "Cracked Engine Block": "Bloque de motor agrietado",
+        "Fried Motherboard": "Placa base quemada",
+        "Flickering Vacuum Tube": "Tubo de vacío parpadeante",
+        "Tangled Wire Harness": "Arnés de cables enredado",
+        "Burnt Capacitor": "Condensador quemado",
+        "Dented Fender": "Guardabarros abollado",
+        "Shattered Windshield": "Parabrisas destrozado",
+        "Corroded Exhaust Pipe": "Tubo de escape corroído",
+        "Bald Tire": "Neumático desgastado",
+        "Vintage Radio Knob": "Perilla de radio vintage",
+        "Antique Brass Valve": "Válvula de latón antigua"
+    },
+    "categories": {
+        "Mechanical": "Mecánica",
+        "Electronics": "Electrónica",
+        "Body": "Carrocería",
+        "Unique": "Único"
+    },
+    "inventory": {
+        "full": "¡Inventario lleno!",
+        "added": "{item} añadido al inventario",
+        "removed": "{item} eliminado del inventario"
+    },
+    "player": {
+        "balance": "Saldo: {amount}",
+        "free_loots": "Saqueos gratuitos restantes: {count}"
+    }
+}

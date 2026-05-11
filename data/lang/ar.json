@@ -1,0 +1,53 @@
+{
+    "game": {
+        "title": "ساحة الخردة",
+        "overlooking": "--- إطلالة على ساحة الخردة ---"
+    },
+    "loot": {
+        "found": "وجدت: {name} | النموذج: {model}",
+        "empty": "لا شيء مفيد هنا..."
+    },
+    "ui": {
+        "loot_button": "!ابحث",
+        "search_again": "ابحث مجدداً",
+        "back": "رجوع",
+        "item_value": "القيمة: ${value}",
+        "item_condition": "الحالة: {condition}%",
+        "item_category": "الفئة: {category}",
+        "no_model": "[لا يوجد نموذج ثلاثي الأبعاد]",
+        "language": "اللغة: {lang}",
+        "quit": "خروج"
+    },
+    "items": {
+        "Rusty Radiator": "مبرّد صدئ",
+        "Seized Piston": "مكبس متوقف",
+        "Bent Crankshaft": "عمود مرفقي مثني",
+        "Oil-Stained Gearbox": "علبة تروس ملطخة بالزيت",
+        "Cracked Engine Block": "كتلة محرك متصدعة",
+        "Fried Motherboard": "لوحة أم محترقة",
+        "Flickering Vacuum Tube": "أنبوب مفرغ يومض",
+        "Tangled Wire Harness": "حزمة أسلاك متشابكة",
+        "Burnt Capacitor": "مكثف محترق",
+        "Dented Fender": "رفرف مضغوط",
+        "Shattered Windshield": "زجاج أمامي محطم",
+        "Corroded Exhaust Pipe": "أنبوب عادم متآكل",
+        "Bald Tire": "إطار أصلع",
+        "Vintage Radio Knob": "مقبض راديو عتيق",
+        "Antique Brass Valve": "صمام نحاسي أثري"
+    },
+    "categories": {
+        "Mechanical": "ميكانيكي",
+        "Electronics": "إلكترونيات",
+        "Body": "هيكل",
+        "Unique": "فريد"
+    },
+    "inventory": {
+        "full": "المخزون ممتلئ!",
+        "added": "تمت إضافة {item} إلى المخزون",
+        "removed": "تمت إزالة {item} من المخزون"
+    },
+    "player": {
+        "balance": "الرصيد: {amount}",
+        "free_loots": "عمليات النهب المجانية المتبقية: {count}"
+    }
+}

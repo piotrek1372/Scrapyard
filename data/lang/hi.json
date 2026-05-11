@@ -1,0 +1,53 @@
+{
+    "game": {
+        "title": "कबाड़खाना",
+        "overlooking": "--- कबाड़खाने पर नज़र ---"
+    },
+    "loot": {
+        "found": "आपको मिला: {name} | मॉडल: {model}",
+        "empty": "यहाँ कुछ काम का नहीं है..."
+    },
+    "ui": {
+        "loot_button": "खोजो!",
+        "search_again": "और खोजो",
+        "back": "वापस",
+        "item_value": "मूल्य: ${value}",
+        "item_condition": "स्थिति: {condition}%",
+        "item_category": "श्रेणी: {category}",
+        "no_model": "[कोई 3D मॉडल नहीं]",
+        "language": "भाषा: {lang}",
+        "quit": "बाहर"
+    },
+    "items": {
+        "Rusty Radiator": "जंग लगा रेडिएटर",
+        "Seized Piston": "जाम पिस्टन",
+        "Bent Crankshaft": "मुड़ी हुई क्रैंकशाफ्ट",
+        "Oil-Stained Gearbox": "तेल से सना गियरबॉक्स",
+        "Cracked Engine Block": "टूटा इंजन ब्लॉक",
+        "Fried Motherboard": "जला हुआ मदरबोर्ड",
+        "Flickering Vacuum Tube": "टिमटिमाती वैक्यूम ट्यूब",
+        "Tangled Wire Harness": "उलझा तार हार्नेस",
+        "Burnt Capacitor": "जला कैपेसिटर",
+        "Dented Fender": "पिचका फेंडर",
+        "Shattered Windshield": "टूटा विंडशील्ड",
+        "Corroded Exhaust Pipe": "जंग लगा एग्ज़ॉस्ट पाइप",
+        "Bald Tire": "घिसा टायर",
+        "Vintage Radio Knob": "पुराना रेडियो नॉब",
+        "Antique Brass Valve": "प्राचीन पीतल वाल्व"
+    },
+    "categories": {
+        "Mechanical": "यांत्रिक",
+        "Electronics": "इलेक्ट्रॉनिक्स",
+        "Body": "बॉडी",
+        "Unique": "अनूठा"
+    },
+    "inventory": {
+        "full": "इन्वेंटरी भर गई!",
+        "added": "{item} इन्वेंटरी में जोड़ा गया",
+        "removed": "{item} इन्वेंटरी से हटाया गया"
+    },
+    "player": {
+        "balance": "बैलेंस: {amount}",
+        "free_loots": "शेष मुफ्त लूट: {count}"
+    }
+}
