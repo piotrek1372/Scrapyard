@@ -32,7 +32,7 @@ _WORN_TEXT  = (0.50, 0.45, 0.38, 1.0)
 _AMBER      = (0.95, 0.60, 0.15, 1.0)
 _GREEN_OK   = (0.30, 0.70, 0.25, 1.0)
 _ERROR_RED  = (0.90, 0.25, 0.15, 1.0)
-_ENTRY_BG   = (0.10, 0.09, 0.08, 1.0)
+_ENTRY_BG   = (0.04, 0.03, 0.02, 1.0)
 
 
 def _format_playtime(seconds: float) -> str:
@@ -83,6 +83,8 @@ class ProfileScreen:
         self.app = app
         self._elements: list = []
         self._status_label = None
+        self._nick_display = None
+        self._edit_btn = None
         self._nick_entry = None
         self._build()
 
@@ -114,18 +116,48 @@ class ProfileScreen:
 
         y = 0.38
 
-        # Nick (editable)
+        # Nick (editable toggle)
         self._add_row(card, t("profile.nick_label"), y, is_label=False)
+        nick_str = profile.nick if profile else ""
+
+        self._nick_display = DirectLabel(
+            parent=card,
+            text=nick_str,
+            scale=0.062,
+            pos=(0.02, 0, y),
+            text_fg=_DIRT_TEXT,
+            frameColor=(0, 0, 0, 0),
+            text_align=TextNode.ALeft,
+        )
+        self._elements.append(self._nick_display)
+
+        self._edit_btn = DirectButton(
+            parent=card,
+            text="[ Edit ]",
+            scale=0.045,
+            pos=(0.40, 0, y),
+            command=self._on_edit_click,
+            frameColor=(0, 0, 0, 0),
+            text_fg=_AMBER,
+            relief="flat",
+            pressEffect=True,
+        )
+        self._elements.append(self._edit_btn)
+
         self._nick_entry = DirectEntry(
             parent=card,
-            text=profile.nick if profile else "",
+            text="",
+            initialText=nick_str,
             scale=0.065,
-            pos=(0.02, 0, y - 0.04),
-            width=16,
+            pos=(0.02, 0, y),
+            width=9,
+            pad=(0.2, 0.2),
+            text_pos=(0.3, -0.01),
             numLines=1,
             frameColor=_ENTRY_BG,
-            text_fg=_DIRT_TEXT,
+            text_fg=_AMBER,
         )
+        self._nick_entry.hide()
         self._elements.append(self._nick_entry)
         y -= 0.18
 
@@ -230,6 +262,16 @@ class ProfileScreen:
             self._elements.append(val)
 
     # ── Actions ───────────────────────────────────────────────────────────
+
+    def _on_edit_click(self) -> None:
+        """Hides the display label and shows the entry field."""
+        if self._nick_display:
+            self._nick_display.hide()
+        if self._edit_btn:
+            self._edit_btn.hide()
+        if self._nick_entry:
+            self._nick_entry.show()
+            self._nick_entry["focus"] = 1
 
     def _on_save(self) -> None:
         """Validates and saves the updated nick."""

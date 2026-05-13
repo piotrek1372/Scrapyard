@@ -107,6 +107,8 @@ class SavesScreen:
                 scale=0.065,
                 pos=(-0.55, 0, -0.035),
                 width=16,
+                pad=(0.2, 0.2),
+                text_pos=(0.3, -0.01),
                 numLines=1,
                 focus=1,
                 frameColor=(0.08, 0.07, 0.06, 1.0),

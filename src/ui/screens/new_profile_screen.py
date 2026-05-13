@@ -81,6 +81,8 @@ class NewProfileScreen:
             scale=0.075,
             pos=(-0.48, 0, -0.04),
             width=12,
+            pad=(0.2, 0.2),
+            text_pos=(0.3, -0.01),
             numLines=1,
             focus=1,
             frameColor=_ENTRY_BG,
