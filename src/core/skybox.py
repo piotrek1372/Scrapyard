@@ -8,7 +8,7 @@ import logging
 from pathlib import Path
 from panda3d.core import (
     NodePath, Texture, SamplerState, Filename, 
-    Shader, TransparencyAttrib, Vec3,
+    Shader, TransparencyAttrib,
     Geom, GeomNode, GeomTriangles, GeomVertexData,
     GeomVertexFormat, GeomVertexWriter
 )
@@ -47,7 +47,12 @@ class SkyboxManager:
         try:
             # 1. Procedural Sky Dome (Inverted UV Sphere)
             self.skybox = self._make_skydome(segments=48)
-            self.skybox.reparentTo(self.render)
+            # Attach to the camera node so the dome follows the camera
+            # automatically every frame at zero per-frame cost.  This
+            # eliminates the need for setPos() in update() and prevents
+            # render-bin sort invalidation on every frame.
+            self.skybox.reparentTo(self.app.camera)
+            self.skybox.setPos(0, 0, 0)
             self.skybox.setScale(900)  # Large enough to avoid clipping
             self.skybox.setBin("background", 0)
             self.skybox.setDepthWrite(False)
@@ -203,11 +208,6 @@ class SkyboxManager:
         
         return NodePath(node)
 
-    def update(self, camera_pos: Vec3) -> None:
-        """Keeps the skybox centered on the camera.
-        
-        Args:
-            camera_pos: Current position of the camera in world space.
-        """
-        if self.skybox:
-            self.skybox.setPos(camera_pos)
+    # update() removed: the skybox is now a child of app.camera, so it
+    # follows the camera automatically.  No per-frame position writes means
+    # no render-bin sort cache invalidation and no flickering.

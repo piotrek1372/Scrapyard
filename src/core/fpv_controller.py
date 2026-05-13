@@ -14,9 +14,7 @@ from typing import Dict
 
 from panda3d.core import (
     CollisionHandlerPusher,
-    CollisionHandlerQueue,
     CollisionNode,
-    CollisionRay,
     CollisionSphere,
     CollisionTraverser,
     NodePath,
@@ -127,7 +125,10 @@ class FPVController:
         # Lock the cursor immediately on startup.
         self.set_input_mode(locked=True)
 
-        self.base.taskMgr.add(self._update_task, "fpv_update_task")
+        # sort=10 guarantees this task runs before main_update_task (sort=20)
+        # so terrain and environment updates always read the camera position
+        # that has already been advanced by the FPV controller this frame.
+        self.base.taskMgr.add(self._update_task, "fpv_update_task", sort=10)
         logger.info(
             "FPVController ready — pos=%s bounds=±%.0f", start_pos, bounds
         )
@@ -196,10 +197,15 @@ class FPVController:
         setattr(self.input, action, state)
 
     def _setup_collisions(self) -> None:
-        """Initialize collision traverser, wall pusher, and ground ray.
+        """Initialize collision traverser and wall-pusher sphere.
 
         Reuses an existing cTrav on the ShowBase instance if one was
         already created by the application, to avoid duplicate traversers.
+
+        Ground detection is NOT done via a collision ray because
+        GeoMipTerrain's render mesh is invisible to CollisionTraverser.
+        Instead, _apply_gravity() queries TerrainManager.get_height_at()
+        directly from the stored PNMImage — O(1) and always accurate.
         """
         if not getattr(self.base, "cTrav", None):
             self.base.cTrav = CollisionTraverser("base_traverser")
@@ -216,17 +222,6 @@ class FPVController:
         self.player_c_np = self.player_np.attachNewNode(sphere_node)
         self.pusher.addCollider(self.player_c_np, self.player_np)
         self.base.cTrav.addCollider(self.player_c_np, self.pusher)
-
-        # ── Ground-detection ray ──────────────────────────────────────
-        ray = CollisionRay(0, 0, 2.0, 0, 0, -1)
-        ray_node = CollisionNode("player_ray")
-        ray_node.addSolid(ray)
-        ray_node.setFromCollideMask(1)
-        ray_node.setIntoCollideMask(0)
-
-        self.player_ray_np = self.player_np.attachNewNode(ray_node)
-        self.ground_handler = CollisionHandlerQueue()
-        self.base.cTrav.addCollider(self.player_ray_np, self.ground_handler)
 
     # ── Per-frame helpers ─────────────────────────────────────────────────
 
@@ -297,7 +292,12 @@ class FPVController:
         self.player_np.setPos(clamped)
 
     def _apply_gravity(self, dt: float) -> None:
-        """Integrate gravity and snap to ground when a surface is detected.
+        """Integrate gravity and snap to ground via heightmap sampling.
+
+        Replaces the former CollisionRay approach: GeoMipTerrain render
+        meshes are invisible to CollisionTraverser, so the ray never hit
+        the terrain.  Direct PNMImage sampling via
+        TerrainManager.get_height_at() is O(1) and always accurate.
 
         Args:
             dt: Delta-time in seconds from the previous frame.
@@ -305,16 +305,16 @@ class FPVController:
         self._velocity_z += self.GRAVITY * dt
         self.player_np.setZ(self.player_np.getZ() + self._velocity_z * dt)
 
-        if self.ground_handler.getNumEntries() > 0:
-            self.ground_handler.sortEntries()
-            entry = self.ground_handler.getEntries()[0]
-            surface_z: float = entry.getSurfacePoint(self.base.render).z
-
-            # Only snap if the surface is below the player's knee level.
-            if surface_z < self.player_np.getZ() + 1.0:
+        terrain_mgr = getattr(self.base, "terrain_manager", None)
+        if terrain_mgr is not None:
+            surface_z: float = terrain_mgr.get_height_at(
+                self.player_np.getX(), self.player_np.getY()
+            )
+            if self.player_np.getZ() <= surface_z:
                 self.player_np.setZ(surface_z)
                 self._velocity_z = 0.0
-        elif self.player_np.getZ() < self.FALL_FLOOR:
+
+        if self.player_np.getZ() < self.FALL_FLOOR:
             logger.warning("Player fell below world floor — resetting Z.")
             self.player_np.setZ(self.FALL_RECOVERY_Z)
             self._velocity_z = 0.0

@@ -17,46 +17,85 @@ logger = logging.getLogger("Scrapyard.Terrain")
 
 class TerrainChunk:
     """A single chunk of terrain managed by GeoMipTerrain."""
-    def __init__(self, cx: int, cy: int, size: int, parent: NodePath, loader):
+    # Vertical scale applied to the root node — must match setSz() below.
+    _HEIGHT_SCALE: float = 20.0
+
+    def __init__(self, cx: int, cy: int, size: int, parent: NodePath, loader) -> None:
+        """Create a single terrain chunk at grid position (cx, cy).
+
+        Args:
+            cx: Chunk column index (world_x = cx * size).
+            cy: Chunk row index   (world_y = cy * size).
+            size: Chunk edge length in world units (also heightmap width-1).
+            parent: NodePath to attach the visible root to when visible.
+            loader: Panda3D loader (unused directly, kept for API symmetry).
+        """
         self.cx, self.cy = cx, cy
         self.size = size
         self.parent = parent
         self.loader = loader
-        
+
+        # Heightmap image stored for direct height sampling (no collision mesh).
+        self.img: PNMImage = PNMImage(self.size + 1, self.size + 1)
+
         self.terrain = GeoMipTerrain(f"chunk_{cx}_{cy}")
-        self._generate_heightmap()  # setBlockSize/Near/Far called inside, before generate()
-        
+        self._generate_heightmap()  # fills self.img, then calls generate()
+
         self.root: NodePath = self.terrain.getRoot()
         self.root.setPos(cx * size, cy * size, 0)
-        self.root.setSz(20.0)
-        
+        self.root.setSz(self._HEIGHT_SCALE)
+
         self.is_visible = False
         
     def _generate_heightmap(self) -> None:
-        """Generates a unique heightmap for this chunk.
+        """Fill self.img with a procedural heightmap and call generate().
 
         Configuration order is mandatory: setHeightfield → setBlockSize
         → setNear → setFar → generate(). Calling generate() before
         setBlockSize silently uses the default block size (producing
         16 sub-blocks instead of 1), which breaks per-chunk tiling.
+
+        self.img is kept alive after generate() so that get_height()
+        can sample it at O(1) cost without any collision geometry.
         """
-        # 65x65 is required for 64x64 terrain due to the +1 stitching rule.
-        img = PNMImage(self.size + 1, self.size + 1)
         # Procedural sine-wave heightmap for visual terrain variation.
         for x in range(self.size + 1):
             for y in range(self.size + 1):
                 wx = (self.cx * self.size + x) * 0.05
                 wy = (self.cy * self.size + y) * 0.05
                 val = (math.sin(wx) * math.cos(wy) + 1.0) * 0.5
-                img.set_gray(x, y, val * 0.2 + 0.1)
+                self.img.set_gray(x, y, val * 0.2 + 0.1)
 
-        self.terrain.setHeightfield(img)
+        self.terrain.setHeightfield(self.img)
         self.terrain.setBlockSize(self.size)   # Must precede generate().
         self.terrain.setNear(self.size * 2)    # LOD near distance.
         self.terrain.setFar(self.size * 4)     # LOD far distance.
         self.terrain.generate()
 
-    def set_visible(self, visible: bool):
+    def get_height(self, local_x: float, local_y: float) -> float:
+        """Return world-space terrain height at chunk-local coordinates.
+
+        Samples self.img (the raw PNMImage grayscale, range 0-1) and
+        applies the same vertical scale used by the root node's setSz().
+        Nearest-pixel lookup — sufficient for character ground-snapping.
+
+        Args:
+            local_x: X position within this chunk (0 .. self.size).
+            local_y: Y position within this chunk (0 .. self.size).
+
+        Returns:
+            Height in world units.
+        """
+        px: int = int(max(0, min(self.size, local_x)))
+        py: int = int(max(0, min(self.size, local_y)))
+        return self.img.get_gray(px, py) * self._HEIGHT_SCALE
+
+    def set_visible(self, visible: bool) -> None:
+        """Attach or detach the chunk root from the scene graph.
+
+        Args:
+            visible: True to show, False to hide.
+        """
         if visible and not self.is_visible:
             self.root.reparentTo(self.parent)
             self.is_visible = True
@@ -64,9 +103,10 @@ class TerrainChunk:
             self.root.detachNode()
             self.is_visible = False
 
-    def destroy(self):
+    def destroy(self) -> None:
+        """Remove geometry from the scene graph and free the node."""
         self.root.removeNode()
-        # GeoMipTerrain will be garbage collected
+        # GeoMipTerrain will be garbage-collected with this chunk.
 
 class TerrainManager:
     """Manages a grid of TerrainChunks based on player distance."""
@@ -140,4 +180,30 @@ class TerrainManager:
             # LOADED <-> VISIBLE
             self.chunks[pos].set_visible(pos in needed_visible)
             
-        logger.info(f"Terrain updated: {len(self.chunks)} chunks in RAM, {len(needed_visible)} visible.")
+        logger.info(
+            "Terrain updated: %d chunks in RAM, %d visible.",
+            len(self.chunks), len(needed_visible),
+        )
+
+    def get_height_at(self, world_x: float, world_y: float) -> float:
+        """Return terrain height at world-space coordinates.
+
+        Finds the chunk that owns (world_x, world_y) and delegates to
+        TerrainChunk.get_height().  Returns 0.0 if no chunk is loaded
+        at that position (e.g. player is beyond the loaded border).
+
+        Args:
+            world_x: World X coordinate.
+            world_y: World Y coordinate.
+
+        Returns:
+            Height in world units, or 0.0 if the chunk is not loaded.
+        """
+        cx: int = int(math.floor(world_x / self.chunk_size))
+        cy: int = int(math.floor(world_y / self.chunk_size))
+        chunk = self.chunks.get((cx, cy))
+        if chunk is None:
+            return 0.0
+        local_x: float = world_x - cx * self.chunk_size
+        local_y: float = world_y - cy * self.chunk_size
+        return chunk.get_height(local_x, local_y)

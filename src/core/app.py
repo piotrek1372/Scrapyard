@@ -118,7 +118,7 @@ class ScrapyardApp(ShowBase):
         )
 
         # ── Update Task ───────────────────────────────────────────────────
-        self.taskMgr.add(self._main_update_task, "main_update_task")
+        self.taskMgr.add(self._main_update_task, "main_update_task", sort=20)
 
         # ── Fonts ─────────────────────────────────────────────────────────
         self._setup_fonts()
@@ -143,11 +143,15 @@ class ScrapyardApp(ShowBase):
             logger.error("Could not load system font for i18n: %s", e)
 
     def _main_update_task(self, task):
-        """Main update loop for managers."""
-        player_pos = self.fpv_controller.get_pos()
-        # Terrain manager could check if new chunks should be unlocked
+        """Main update loop for managers.
+
+        Runs at sort=20 — always after fpv_update_task (sort=10), so
+        terrain and environment updates see the camera position already
+        advanced by the FPV controller for this frame.
+        """
         self.terrain_manager.update()
-        self.skybox_manager.update(self.camera.getPos(self.render))
+        # skybox_manager.update() removed: skybox is now a child of
+        # app.camera and follows it automatically (see skybox.py).
         self.env_manager.update(self.camera.getPos(self.render))
         return task.cont
 
