@@ -24,11 +24,7 @@ class TerrainChunk:
         self.loader = loader
         
         self.terrain = GeoMipTerrain(f"chunk_{cx}_{cy}")
-        self._generate_heightmap()
-        
-        self.terrain.setBlockSize(size) # One block per chunk for simplicity in this model
-        self.terrain.setNear(size * 2)
-        self.terrain.setFar(size * 4)
+        self._generate_heightmap()  # setBlockSize/Near/Far called inside, before generate()
         
         self.root: NodePath = self.terrain.getRoot()
         self.root.setPos(cx * size, cy * size, 0)
@@ -36,19 +32,28 @@ class TerrainChunk:
         
         self.is_visible = False
         
-    def _generate_heightmap(self):
-        """Generates a unique heightmap for this chunk."""
-        # 65x65 is required for 64x64 terrain due to +1 stitching rule
+    def _generate_heightmap(self) -> None:
+        """Generates a unique heightmap for this chunk.
+
+        Configuration order is mandatory: setHeightfield → setBlockSize
+        → setNear → setFar → generate(). Calling generate() before
+        setBlockSize silently uses the default block size (producing
+        16 sub-blocks instead of 1), which breaks per-chunk tiling.
+        """
+        # 65x65 is required for 64x64 terrain due to the +1 stitching rule.
         img = PNMImage(self.size + 1, self.size + 1)
-        # Use simple sine waves for testing procedural terrain
+        # Procedural sine-wave heightmap for visual terrain variation.
         for x in range(self.size + 1):
             for y in range(self.size + 1):
                 wx = (self.cx * self.size + x) * 0.05
                 wy = (self.cy * self.size + y) * 0.05
                 val = (math.sin(wx) * math.cos(wy) + 1.0) * 0.5
                 img.set_gray(x, y, val * 0.2 + 0.1)
-        
+
         self.terrain.setHeightfield(img)
+        self.terrain.setBlockSize(self.size)   # Must precede generate().
+        self.terrain.setNear(self.size * 2)    # LOD near distance.
+        self.terrain.setFar(self.size * 4)     # LOD far distance.
         self.terrain.generate()
 
     def set_visible(self, visible: bool):

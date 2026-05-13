@@ -67,8 +67,11 @@ class ScrapyardApp(ShowBase):
         self.game_config = config or Config()
         
         # Apply PRC settings before ShowBase initialization
+        res = self.game_config.get("graphics.resolution", [1920, 1080])
         vsync = "t" if self.game_config.get("graphics.vsync") else "f"
         msaa = self.game_config.get("graphics.msaa")
+        loadPrcFileData("", "fullscreen true")
+        loadPrcFileData("", f"win-size {res[0]} {res[1]}")
         loadPrcFileData("", f"sync-video {vsync}")
         loadPrcFileData("", f"framebuffer-multisample 1")
         loadPrcFileData("", f"multisamples {msaa}")
@@ -79,8 +82,6 @@ class ScrapyardApp(ShowBase):
         # ── Window setup ──────────────────────────────────────────────────
         props = WindowProperties()
         props.setTitle("Scrapyard")
-        res = self.game_config.get("graphics.resolution")
-        props.setSize(res[0], res[1])
         self.win.requestProperties(props)
 
         # ── i18n ──────────────────────────────────────────────────────────
@@ -108,9 +109,13 @@ class ScrapyardApp(ShowBase):
         self.terrain_manager = TerrainManager(self)
         
         # ── FPV Controller ────────────────────────────────────────────────
-        from panda3d.core import CollisionTraverser
-        self.cTrav = CollisionTraverser("app_traverser")
-        self.fpv_controller = FPVController(self, start_pos=LVector3(0, 0, 5))
+        # Bounds = render_dist × chunk_size; FPVController owns cTrav creation.
+        _render_dist: int = self.game_config.get("graphics.render_distance", 15)
+        _chunk_size: int = 64
+        _bounds: float = float(_render_dist * _chunk_size)
+        self.fpv_controller = FPVController(
+            self, start_pos=LVector3(0, 0, 5), bounds=_bounds
+        )
 
         # ── Update Task ───────────────────────────────────────────────────
         self.taskMgr.add(self._main_update_task, "main_update_task")
@@ -135,7 +140,7 @@ class ScrapyardApp(ShowBase):
                 TextProperties.setDefaultFont(font)
                 DGG.setDefaultFont(font)
         except Exception as e:
-            print(f"[ScrapyardApp] Could not load system font for i18n: {e}")
+            logger.error("Could not load system font for i18n: %s", e)
 
     def _main_update_task(self, task):
         """Main update loop for managers."""
@@ -194,7 +199,7 @@ class ScrapyardApp(ShowBase):
             model = self.loader.loadModel(panda_path)
             return model
         except Exception as e:
-            print(f"[ScrapyardApp] Failed to load model {model_path}: {e}")
+            logger.error("Failed to load model %s: %s", model_path, e)
             return None
 
     def _create_placeholder(self, item):

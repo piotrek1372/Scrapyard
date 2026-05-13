@@ -1,188 +1,362 @@
 """
-FPVController module for handling First Person View movement and camera control.
+FPVController — modular First-Person-View controller for Panda3D.
+
+Architecture (SRP):
+- InputState  : pure-data container for keyboard state and mouse deltas.
+- FPVController : orchestrates camera rotation, movement physics, and
+                  collision response.
 """
+from __future__ import annotations
+
+import logging
+from dataclasses import dataclass
+from typing import Dict
+
 from panda3d.core import (
-    NodePath, WindowProperties, Vec3, Point3, 
-    CollisionNode, CollisionSphere, CollisionRay, 
-    CollisionTraverser, CollisionHandlerPusher, CollisionHandlerQueue
+    CollisionHandlerPusher,
+    CollisionHandlerQueue,
+    CollisionNode,
+    CollisionRay,
+    CollisionSphere,
+    CollisionTraverser,
+    NodePath,
+    Vec3,
+    WindowProperties,
 )
 from direct.showbase.ShowBase import ShowBase
 
-class FPVController:
-    """Handles First Person View camera, movement, and collisions."""
+logger = logging.getLogger("Scrapyard.FPV")
 
-    def __init__(self, base: ShowBase, start_pos: Vec3 = Vec3(0, 0, 5)) -> None:
-        """Initializes the FPVController.
-        
+
+# ── Input State ───────────────────────────────────────────────────────────────
+
+@dataclass
+class InputState:
+    """Pure-data container for keyboard state.
+
+    This dataclass has no Panda3D dependencies and can be tested in
+    isolation without a running application.
+    """
+
+    forward: bool = False
+    backward: bool = False
+    left: bool = False
+    right: bool = False
+
+
+# ── FPV Controller ────────────────────────────────────────────────────────────
+
+class FPVController:
+    """First-Person-View controller for Scrapyard.
+
+    Responsibilities:
+    - Window cursor capture / release (M_relative ↔ M_absolute).
+    - Camera heading (yaw) and pitch from relative mouse deltas.
+    - Vector-based WASD movement scaled by delta-time.
+    - Gravity + ground-ray collision for terrain snapping.
+    - Constraint box that prevents the player from leaving the tile grid.
+    """
+
+    # ── Class-level tuning constants ──────────────────────────────────────
+    GRAVITY: float = -20.0
+    """Downward acceleration in units/s²."""
+
+    EYE_HEIGHT: float = 1.7
+    """Camera offset above the player origin in units."""
+
+    SPEED: float = 10.0
+    """Horizontal movement speed in units/s."""
+
+    MOUSE_SENSITIVITY: float = 50.0
+    """Camera rotation per normalized mouse unit (degrees)."""
+
+    PITCH_MIN: float = -89.0
+    """Minimum vertical look angle (degrees)."""
+
+    PITCH_MAX: float = 89.0
+    """Maximum vertical look angle (degrees)."""
+
+    FALL_RECOVERY_Z: float = 5.0
+    """Z-coordinate used when the player falls below FALL_FLOOR."""
+
+    FALL_FLOOR: float = -50.0
+    """If player drops below this Z, teleport to FALL_RECOVERY_Z."""
+
+    # ── Constructor ───────────────────────────────────────────────────────
+
+    def __init__(
+        self,
+        base: ShowBase,
+        start_pos: Vec3 = Vec3(0, 0, 5),
+        bounds: float = 960.0,
+    ) -> None:
+        """Initialize the FPV controller.
+
         Args:
             base: The ShowBase application instance.
-            start_pos: Initial position of the player.
+            start_pos: World-space position where the player spawns.
+            bounds: Half-extent of the playable area in X and Y (units).
+                    The player cannot move beyond ±bounds on either axis.
         """
         self.base = base
-        
-        # Player node setup
-        self.player_np = self.base.render.attachNewNode("player")
+        self._bounds = bounds
+        self.input = InputState()
+
+        # Camera state (degrees)
+        self._heading: float = 0.0
+        self._pitch: float = 0.0
+
+        # Vertical physics state
+        self._velocity_z: float = 0.0
+
+        # Tracks whether the cursor is captured
+        self._input_locked: bool = False
+
+        # ── Player node ───────────────────────────────────────────────
+        self.player_np: NodePath = self.base.render.attachNewNode("player")
         self.player_np.setPos(start_pos)
-        
-        # Attach camera to player
+
+        # ── Camera at eye level ───────────────────────────────────────
         self.base.camera.reparentTo(self.player_np)
-        self.base.camera.setPos(0, 0, 1.7) # Camera at eye level
-        
-        # Movement and camera state
-        self.speed = 10.0
-        self.mouse_sensitivity = 0.1
-        self.heading = 0.0
-        self.pitch = 0.0
-        self.velocity_z = 0.0
-        self.gravity = -20.0
-        
-        self.key_map = {
-            "forward": False,
-            "backward": False,
-            "left": False,
-            "right": False
-        }
-        
-        self._setup_input()
+        self.base.camera.setPos(0, 0, self.EYE_HEIGHT)
+        self.base.camera.setHpr(0, 0, 0)
+
         self._setup_collisions()
-        
-        # Center mouse
-        self._center_mouse()
-        
-        # Task for updating movement
+        self._setup_input()
+
+        # Lock the cursor immediately on startup.
+        self.set_input_mode(locked=True)
+
         self.base.taskMgr.add(self._update_task, "fpv_update_task")
+        logger.info(
+            "FPVController ready — pos=%s bounds=±%.0f", start_pos, bounds
+        )
+
+    # ── Input mode ────────────────────────────────────────────────────────
+
+    def set_input_mode(self, locked: bool) -> None:
+        """Switch the cursor between captured and free modes.
+
+        When releasing the cursor (locked=False) the pointer is explicitly
+        moved to the window centre before applying M_absolute.  This
+        prevents the OS cursor from materialising at the edge of the screen
+        or on a secondary monitor — a side-effect of M_relative leaving the
+        hardware cursor at an undefined position.
+
+        Args:
+            locked: True  → hide cursor, M_relative (game mode).
+                    False → show cursor, M_absolute (menu / paused mode).
+        """
+        self._input_locked = locked
+        props = WindowProperties()
+        if locked:
+            props.setCursorHidden(True)
+            props.setMouseMode(WindowProperties.M_relative)
+            logger.debug("Mouse captured (M_relative).")
+        else:
+            # Park the OS cursor at window centre before switching to
+            # M_absolute so it appears in a predictable location.
+            win = self.base.win
+            cx: int = win.getXSize() // 2
+            cy: int = win.getYSize() // 2
+            win.movePointer(0, cx, cy)
+            props.setCursorHidden(False)
+            props.setMouseMode(WindowProperties.M_absolute)
+            logger.debug("Mouse released (M_absolute) — cursor parked at centre.")
+        self.base.win.requestProperties(props)
+
+    # ── Private setup ─────────────────────────────────────────────────────
+
+    def _setup_input(self) -> None:
+        """Register key bindings for movement, Escape, and mouse re-lock."""
+        bindings: Dict[str, tuple[str, bool]] = {
+            "w":    ("forward",  True),
+            "w-up": ("forward",  False),
+            "s":    ("backward", True),
+            "s-up": ("backward", False),
+            "a":    ("left",     True),
+            "a-up": ("left",     False),
+            "d":    ("right",    True),
+            "d-up": ("right",    False),
+        }
+        for event, (action, state) in bindings.items():
+            self.base.accept(event, self._set_key, [action, state])
+
+        # Escape releases the cursor; left-click re-captures it.
+        self.base.accept("escape", self.set_input_mode, [False])
+        self.base.accept("mouse1", self.set_input_mode, [True])
+
+    def _set_key(self, action: str, state: bool) -> None:
+        """Update a single boolean field on InputState.
+
+        Args:
+            action: Name of the InputState field (e.g. 'forward').
+            state: New boolean value.
+        """
+        setattr(self.input, action, state)
 
     def _setup_collisions(self) -> None:
-        """Sets up the collision solids and handlers for the player."""
-        # 1. Traverser
-        if not hasattr(self.base, 'cTrav') or self.base.cTrav is None:
+        """Initialize collision traverser, wall pusher, and ground ray.
+
+        Reuses an existing cTrav on the ShowBase instance if one was
+        already created by the application, to avoid duplicate traversers.
+        """
+        if not getattr(self.base, "cTrav", None):
             self.base.cTrav = CollisionTraverser("base_traverser")
-            # self.base.cTrav.showCollisions(self.base.render) # Debug
-            
-        # 2. Pusher for walls (horizontal collisions)
+            logger.debug("CollisionTraverser created by FPVController.")
+
+        # ── Wall collision sphere ─────────────────────────────────────
         self.pusher = CollisionHandlerPusher()
-        
-        c_node = CollisionNode("player_sphere")
-        c_node.addSolid(CollisionSphere(0, 0, 1.0, 0.5)) # Sphere radius 0.5 at height 1.0
-        # Player collides with mask 1 (walls and ground)
-        c_node.setFromCollideMask(1)
-        c_node.setIntoCollideMask(0) # Player isn't collided into by others (for now)
-        
-        self.player_c_np = self.player_np.attachNewNode(c_node)
+
+        sphere_node = CollisionNode("player_sphere")
+        sphere_node.addSolid(CollisionSphere(0, 0, 1.0, 0.5))
+        sphere_node.setFromCollideMask(1)
+        sphere_node.setIntoCollideMask(0)
+
+        self.player_c_np = self.player_np.attachNewNode(sphere_node)
         self.pusher.addCollider(self.player_c_np, self.player_np)
         self.base.cTrav.addCollider(self.player_c_np, self.pusher)
 
-        # 3. Ray for ground detection (vertical collisions / gravity)
-        self.ground_ray = CollisionRay()
-        self.ground_ray.setOrigin(0, 0, 2.0) # Start from above the player
-        self.ground_ray.setDirection(0, 0, -1) # Point straight down
-        
-        c_ray_node = CollisionNode("player_ray")
-        c_ray_node.addSolid(self.ground_ray)
-        c_ray_node.setFromCollideMask(1) # Ground mask
-        c_ray_node.setIntoCollideMask(0)
-        
-        self.player_ray_np = self.player_np.attachNewNode(c_ray_node)
-        
+        # ── Ground-detection ray ──────────────────────────────────────
+        ray = CollisionRay(0, 0, 2.0, 0, 0, -1)
+        ray_node = CollisionNode("player_ray")
+        ray_node.addSolid(ray)
+        ray_node.setFromCollideMask(1)
+        ray_node.setIntoCollideMask(0)
+
+        self.player_ray_np = self.player_np.attachNewNode(ray_node)
         self.ground_handler = CollisionHandlerQueue()
         self.base.cTrav.addCollider(self.player_ray_np, self.ground_handler)
 
-    def _setup_input(self) -> None:
-        """Sets up keyboard and mouse inputs."""
-        # Keyboard
-        self.base.accept("w", self._update_key_map, ["forward", True])
-        self.base.accept("w-up", self._update_key_map, ["forward", False])
-        self.base.accept("s", self._update_key_map, ["backward", True])
-        self.base.accept("s-up", self._update_key_map, ["backward", False])
-        self.base.accept("a", self._update_key_map, ["left", True])
-        self.base.accept("a-up", self._update_key_map, ["left", False])
-        self.base.accept("d", self._update_key_map, ["right", True])
-        self.base.accept("d-up", self._update_key_map, ["right", False])
-        
-        # Hide mouse cursor and lock it
-        props = WindowProperties()
-        props.setCursorHidden(True)
-        props.setMouseMode(WindowProperties.M_relative)
-        self.base.win.requestProperties(props)
+    # ── Per-frame helpers ─────────────────────────────────────────────────
 
-    def _update_key_map(self, key: str, value: bool) -> None:
-        """Updates the state of a movement key."""
-        self.key_map[key] = value
+    def _rotate_camera(self) -> None:
+        """Apply per-frame mouse deltas to yaw (player) and pitch (camera).
 
-    def _center_mouse(self) -> None:
-        """Centers the mouse in the window."""
-        if self.base.win:
-            win_x = self.base.win.getProperties().getXSize() // 2
-            win_y = self.base.win.getProperties().getYSize() // 2
-            self.base.win.movePointer(0, win_x, win_y)
+        Reads the raw pixel position via win.getPointer(0), computes the
+        delta relative to the window centre, then immediately resets the
+        OS cursor to the centre with win.movePointer().  This produces a
+        true per-frame delta that is independent of cursor distance from
+        centre — eliminating the "speed grows with distance" artefact that
+        occurs when using getMouseX/Y() (which returns absolute position,
+        not a delta, even under M_relative).
+        """
+        if not self._input_locked:
+            return
 
-    def _update_task(self, task) -> int:
-        """Frame task for processing movement and camera rotation."""
-        dt = self.base.taskMgr.globalClock.getDt()
-        
-        # ── Mouse Look ──
-        if self.base.mouseWatcherNode.hasMouse() and self.base.win:
-            md = self.base.win.getPointer(0)
-            x = md.getX()
-            y = md.getY()
-            
-            win_center_x = self.base.win.getProperties().getXSize() // 2
-            win_center_y = self.base.win.getProperties().getYSize() // 2
-            
-            delta_x = x - win_center_x
-            delta_y = y - win_center_y
-            
-            if delta_x != 0 or delta_y != 0:
-                self.heading -= delta_x * self.mouse_sensitivity
-                self.pitch -= delta_y * self.mouse_sensitivity
-                
-                self.pitch = max(-89.0, min(89.0, self.pitch))
-                
-                self.player_np.setH(self.heading)
-                self.base.camera.setP(self.pitch)
-                
-                self._center_mouse()
+        win = self.base.win
+        ptr = win.getPointer(0)
 
-        # ── Movement ──
-        move_vec = Vec3(0, 0, 0)
-        
-        if self.key_map["forward"]:
-            move_vec.y += 1.0
-        if self.key_map["backward"]:
-            move_vec.y -= 1.0
-        if self.key_map["left"]:
-            move_vec.x -= 1.0
-        if self.key_map["right"]:
-            move_vec.x += 1.0
-            
-        if move_vec.length() > 0:
-            move_vec.normalize()
-            move_vec *= self.speed * dt
-            self.player_np.setPos(self.player_np, move_vec)
-        
-        # ── Gravity and Ground Snapping ──
-        # Apply gravity
-        self.velocity_z += self.gravity * dt
-        self.player_np.setZ(self.player_np.getZ() + self.velocity_z * dt)
-        
-        # Check ground collisions
+        cx: int = win.getXSize() // 2
+        cy: int = win.getYSize() // 2
+
+        dx: float = float(ptr.getX() - cx)
+        dy: float = float(ptr.getY() - cy)
+
+        # Always re-centre so next frame's delta starts from zero.
+        win.movePointer(0, cx, cy)
+
+        if dx == 0.0 and dy == 0.0:
+            return
+
+        # Normalise by window half-size so sensitivity is resolution-
+        # independent (matches the [-1, 1] range of the old getMouseX/Y).
+        dx /= cx
+        dy /= cy
+
+        self._heading -= dx * self.MOUSE_SENSITIVITY
+        self._pitch -= dy * self.MOUSE_SENSITIVITY
+        self._pitch = max(self.PITCH_MIN, min(self.PITCH_MAX, self._pitch))
+
+        # Heading drives the whole player body (yaw); pitch drives only
+        # the camera node so strafing direction stays correct.
+        self.player_np.setH(self._heading)
+        self.base.camera.setP(self._pitch)
+
+    def _apply_movement(self, dt: float) -> None:
+        """Build and apply the WASD movement vector.
+
+        Movement is expressed in the player's local coordinate frame so
+        that forward always follows the current heading.
+
+        Args:
+            dt: Delta-time in seconds from the previous frame.
+        """
+        x: float = float(self.input.right) - float(self.input.left)
+        y: float = float(self.input.forward) - float(self.input.backward)
+
+        move = Vec3(x, y, 0)
+        if move.lengthSquared() > 0:
+            move.normalize()
+            move *= self.SPEED * dt
+            # setPos with a second NodePath argument moves in local space.
+            self.player_np.setPos(self.player_np, move)
+
+        # Clamp XY to the constraint box after applying the delta.
+        clamped = self._clamp_position(self.player_np.getPos())
+        self.player_np.setPos(clamped)
+
+    def _apply_gravity(self, dt: float) -> None:
+        """Integrate gravity and snap to ground when a surface is detected.
+
+        Args:
+            dt: Delta-time in seconds from the previous frame.
+        """
+        self._velocity_z += self.GRAVITY * dt
+        self.player_np.setZ(self.player_np.getZ() + self._velocity_z * dt)
+
         if self.ground_handler.getNumEntries() > 0:
             self.ground_handler.sortEntries()
-            # Find highest entry beneath the player
-            for entry in self.ground_handler.getEntries():
-                surface_point = entry.getSurfacePoint(self.base.render)
-                if surface_point.z < self.player_np.getZ() + 1.0: # Only snap to things below knee level
-                    self.player_np.setZ(surface_point.z)
-                    self.velocity_z = 0.0
-                    break
-        else:
-            # Fallback to prevent falling out of world forever
-            if self.player_np.getZ() < -50:
-                self.player_np.setZ(5)
-                self.velocity_z = 0.0
+            entry = self.ground_handler.getEntries()[0]
+            surface_z: float = entry.getSurfacePoint(self.base.render).z
 
+            # Only snap if the surface is below the player's knee level.
+            if surface_z < self.player_np.getZ() + 1.0:
+                self.player_np.setZ(surface_z)
+                self._velocity_z = 0.0
+        elif self.player_np.getZ() < self.FALL_FLOOR:
+            logger.warning("Player fell below world floor — resetting Z.")
+            self.player_np.setZ(self.FALL_RECOVERY_Z)
+            self._velocity_z = 0.0
+
+    def _clamp_position(self, pos: Vec3) -> Vec3:
+        """Constrain the player to the playable tile grid.
+
+        Args:
+            pos: Unconstrained world-space position.
+
+        Returns:
+            Position with X and Y clamped to ±self._bounds.
+        """
+        return Vec3(
+            max(-self._bounds, min(self._bounds, pos.x)),
+            max(-self._bounds, min(self._bounds, pos.y)),
+            pos.z,
+        )
+
+    # ── Frame task ────────────────────────────────────────────────────────
+
+    def _update_task(self, task) -> int:
+        """Per-frame task: camera rotation → movement → gravity.
+
+        Execution order is intentional: rotate first so that movement
+        direction is already up-to-date for this frame.
+
+        Returns:
+            task.cont to keep the task running.
+        """
+        dt: float = globalClock.getDt()  # type: ignore[name-defined]
+        self._rotate_camera()
+        self._apply_movement(dt)
+        self._apply_gravity(dt)
         return task.cont
 
+    # ── Public API ────────────────────────────────────────────────────────
+
     def get_pos(self) -> Vec3:
-        """Returns the current position of the player."""
+        """Return the player's current world-space position.
+
+        Returns:
+            Vec3 position of the player node.
+        """
         return self.player_np.getPos()

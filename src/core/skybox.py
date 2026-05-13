@@ -51,18 +51,20 @@ class SkyboxManager:
             self.skybox.setScale(900)  # Large enough to avoid clipping
             self.skybox.setBin("background", 0)
             self.skybox.setDepthWrite(False)
+            self.skybox.setDepthTest(False)   # Eliminate Z-fighting at terrain edge
             self.skybox.setLightOff()
             self.skybox.setFogOff()
+            self.skybox.setMaterialOff()      # Block simplepbr material override
 
-            # 2. Strict Resolution Enforcement: 4K only for Full HD target
-            # Removed auto-selection of 8K/16K to prevent accidental OOM
-            tex_res = "4k"
+            # 2. Single 2K asset — replaces multi-resolution 4K/8K/16K set.
+            # 2K (2048x1024) cuts VRAM from 24 MB to 12 MB (float16).
+            tex_res = "2k"
             tex_path = Path(f"assets/textures/freight_station_{tex_res}.hdr")
-            
-            if not tex_path.exists():
-                raise FileNotFoundError(f"Required 4K HDR asset missing: {tex_path}")
 
-            logger.info(f"Loading forced 4K HDR: {tex_path}")
+            if not tex_path.exists():
+                raise FileNotFoundError(f"Required 2K HDR asset missing: {tex_path}")
+
+            logger.info(f"Loading 2K HDR: {tex_path}")
 
             # 3. Optimized HDR Loading
             sky_tex = self._load_hdr_texture(str(tex_path))

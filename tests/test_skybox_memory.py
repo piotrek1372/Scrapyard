@@ -33,7 +33,7 @@ class TestSkyboxMemory(unittest.TestCase):
     def setUp(self):
         self.app = MagicMock()
         self.manager = SkyboxManager(self.app)
-        self.test_hdr = Path("assets/textures/freight_station_4k.hdr")
+        self.test_hdr = Path("assets/textures/freight_station_2k.hdr")
 
     def test_load_hdr_peak_ram(self):
         """Measures peak RAM during HDR loading to ensure it stays within limits."""
@@ -51,10 +51,9 @@ class TestSkyboxMemory(unittest.TestCase):
         peak_mb = peak / (1024 * 1024)
         print(f"\n[Memory Test] Peak RAM: {peak_mb:.2f} MB")
         
-        # 4K HDR float32 is ~96MB. Peak should be around 144MB-200MB 
-        # (f32 + f16 + overhead).
-        # We set a generous limit of 300MB to allow for imageio internal buffers.
-        self.assertLess(peak_mb, 300, f"Peak RAM {peak_mb:.2f}MB exceeds limit!")
+        # 2K HDR (2048x1024) float32 is ~24MB. Peak RAM is f32(24MB)+f16(12MB)+overhead ~36MB.
+        # Ceiling of 100MB is conservative and safe for CI environments.
+        self.assertLess(peak_mb, 100, f"Peak RAM {peak_mb:.2f}MB exceeds limit!")
 
 if __name__ == "__main__":
     unittest.main()
