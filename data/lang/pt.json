@@ -49,5 +49,75 @@
     "player": {
         "balance": "Saldo: {amount}",
         "free_loots": "Saques grátis restantes: {count}"
+    },
+    "menu": {
+        "welcome": "Bem-vindo de volta, {nick}!",
+        "balance": "Saldo: ${balance}",
+        "play": "Jogar",
+        "load_game": "Carregar Jogo",
+        "profile": "Perfil",
+        "settings": "Configurações",
+        "quit": "Sair"
+    },
+    "pause": {
+        "title": "PAUSADO",
+        "resume": "Retomar",
+        "save_game": "Salvar Jogo",
+        "settings": "Configurações",
+        "main_menu": "Menu Principal"
+    },
+    "settings": {
+        "title": "Configurações",
+        "tab_graphics": "Gráficos",
+        "tab_audio": "Áudio",
+        "tab_performance": "Desempenho",
+        "tab_language": "Idioma",
+        "save": "Salvar",
+        "cancel": "Cancelar",
+        "resolution": "Resolução",
+        "fullscreen": "Tela Cheia",
+        "vsync": "VSync",
+        "msaa": "Anti-Aliasing",
+        "render_distance": "Distância de Renderização",
+        "master_volume": "Volume Principal",
+        "music_volume": "Música",
+        "sfx_volume": "Efeitos Sonoros",
+        "muted": "Mudo",
+        "shadow_quality": "Qualidade das Sombras",
+        "texture_quality": "Qualidade das Texturas",
+        "fps_limit": "Limite de FPS",
+        "fps_unlimited": "Ilimitado",
+        "saved": "Configurações salvas."
+    },
+    "profile": {
+        "title": "Perfil",
+        "nick_label": "Apelido",
+        "balance_label": "Saldo",
+        "created_label": "Membro desde",
+        "playtime_label": "Tempo total de jogo",
+        "save": "Salvar Alterações",
+        "saved": "Perfil salvo.",
+        "back": "Voltar"
+    },
+    "saves": {
+        "title_load": "Carregar Jogo",
+        "title_save": "Salvar Jogo",
+        "load": "Carregar",
+        "save": "Salvar",
+        "delete": "Excluir",
+        "confirm_delete": "Excluir este jogo salvo?",
+        "yes": "Sim",
+        "no": "Não",
+        "save_name_placeholder": "Nome do jogo salvo...",
+        "no_saves": "Nenhum jogo salvo encontrado.",
+        "saving": "Salvando...",
+        "saved": "Salvo!"
+    },
+    "new_profile": {
+        "title": "Como você se chama, sucateiro?",
+        "placeholder": "Digite seu apelido...",
+        "start": "Começar a Aventura",
+        "error_short": "O nome deve ter pelo menos 3 caracteres.",
+        "error_long": "O nome deve ter no máximo 20 caracteres."
     }
 }

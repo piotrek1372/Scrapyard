@@ -49,5 +49,75 @@
     "player": {
         "balance": "الرصيد: {amount}",
         "free_loots": "عمليات النهب المجانية المتبقية: {count}"
+    },
+    "menu": {
+        "welcome": "مرحباً بعودتك، {nick}!",
+        "balance": "الرصيد: ${balance}",
+        "play": "العب",
+        "load_game": "تحميل لعبة",
+        "profile": "الملف الشخصي",
+        "settings": "الإعدادات",
+        "quit": "خروج"
+    },
+    "pause": {
+        "title": "متوقف مؤقتاً",
+        "resume": "استئناف",
+        "save_game": "حفظ اللعبة",
+        "settings": "الإعدادات",
+        "main_menu": "القائمة الرئيسية"
+    },
+    "settings": {
+        "title": "الإعدادات",
+        "tab_graphics": "الرسومات",
+        "tab_audio": "الصوت",
+        "tab_performance": "الأداء",
+        "tab_language": "اللغة",
+        "save": "حفظ",
+        "cancel": "إلغاء",
+        "resolution": "الدقة",
+        "fullscreen": "ملء الشاشة",
+        "vsync": "مزامنة رأسية",
+        "msaa": "تنعيم الحواف",
+        "render_distance": "مسافة العرض",
+        "master_volume": "مستوى الصوت الرئيسي",
+        "music_volume": "الموسيقى",
+        "sfx_volume": "المؤثرات",
+        "muted": "كتم الصوت",
+        "shadow_quality": "جودة الظلال",
+        "texture_quality": "جودة الخامات",
+        "fps_limit": "حد الإطارات",
+        "fps_unlimited": "غير محدود",
+        "saved": "تم حفظ الإعدادات."
+    },
+    "profile": {
+        "title": "الملف الشخصي",
+        "nick_label": "الاسم المستعار",
+        "balance_label": "الرصيد",
+        "created_label": "عضو منذ",
+        "playtime_label": "إجمالي وقت اللعب",
+        "save": "حفظ التغييرات",
+        "saved": "تم حفظ الملف.",
+        "back": "رجوع"
+    },
+    "saves": {
+        "title_load": "تحميل لعبة",
+        "title_save": "حفظ اللعبة",
+        "load": "تحميل",
+        "save": "حفظ",
+        "delete": "حذف",
+        "confirm_delete": "حذف هذا الحفظ؟",
+        "yes": "نعم",
+        "no": "لا",
+        "save_name_placeholder": "اسم الحفظ...",
+        "no_saves": "لم يتم العثور على ملفات حفظ.",
+        "saving": "جاري الحفظ...",
+        "saved": "تم الحفظ!"
+    },
+    "new_profile": {
+        "title": "ما اسمك يا جامع الخردة؟",
+        "placeholder": "أدخل الاسم المستعار...",
+        "start": "ابدأ المغامرة",
+        "error_short": "يجب أن يكون الاسم 3 أحرف على الأقل.",
+        "error_long": "يجب أن يكون الاسم 20 حرفاً كحد أقصى."
     }
 }

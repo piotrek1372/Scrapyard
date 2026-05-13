@@ -49,5 +49,75 @@
     "player": {
         "balance": "ব্যালেন্স: {amount}",
         "free_loots": "অবশিষ্ট ফ্রি লুট: {count}"
+    },
+    "menu": {
+        "welcome": "আবার স্বাগতম, {nick}!",
+        "balance": "ব্যালেন্স: ${balance}",
+        "play": "খেলুন",
+        "load_game": "গেম লোড করুন",
+        "profile": "প্রোফাইল",
+        "settings": "সেটিংস",
+        "quit": "প্রস্থান করুন"
+    },
+    "pause": {
+        "title": "পজ করা হয়েছে",
+        "resume": "পুনরায় শুরু করুন",
+        "save_game": "গেম সেভ করুন",
+        "settings": "সেটিংস",
+        "main_menu": "প্রধান মেনু"
+    },
+    "settings": {
+        "title": "সেটিংস",
+        "tab_graphics": "গ্রাফিক্স",
+        "tab_audio": "অডিও",
+        "tab_performance": "কর্মক্ষমতা",
+        "tab_language": "ভাষা",
+        "save": "সেভ করুন",
+        "cancel": "বাতিল করুন",
+        "resolution": "রেজোলিউশন",
+        "fullscreen": "ফুলস্ক্রিন",
+        "vsync": "VSync",
+        "msaa": "অ্যান্টি-অ্যালিয়াসিং",
+        "render_distance": "রেন্ডার দূরত্ব",
+        "master_volume": "মাস্টার ভলিউম",
+        "music_volume": "সঙ্গীত",
+        "sfx_volume": "শব্দের প্রভাব",
+        "muted": "মিউট",
+        "shadow_quality": "ছায়ার মান",
+        "texture_quality": "টেক্সচারের মান",
+        "fps_limit": "FPS সীমা",
+        "fps_unlimited": "সীমাহীন",
+        "saved": "সেটিংস সেভ হয়েছে।"
+    },
+    "profile": {
+        "title": "প্রোফাইল",
+        "nick_label": "ডাকনাম",
+        "balance_label": "ব্যালেন্স",
+        "created_label": "সদস্য হয়েছেন",
+        "playtime_label": "মোট খেলার সময়",
+        "save": "পরিবর্তন সেভ করুন",
+        "saved": "প্রোফাইল সেভ হয়েছে।",
+        "back": "পিছনে"
+    },
+    "saves": {
+        "title_load": "গেম লোড করুন",
+        "title_save": "গেম সেভ করুন",
+        "load": "লোড",
+        "save": "সেভ",
+        "delete": "মুছে ফেলুন",
+        "confirm_delete": "এই সেভ মুছে ফেলবেন?",
+        "yes": "হ্যাঁ",
+        "no": "না",
+        "save_name_placeholder": "সেভের নাম...",
+        "no_saves": "কোনো সেভ পাওয়া যায়নি।",
+        "saving": "সেভ হচ্ছে...",
+        "saved": "সেভ করা হয়েছে!"
+    },
+    "new_profile": {
+        "title": "তোমার নাম কী, স্ক্র্যাপার?",
+        "placeholder": "ডাকনাম লিখুন...",
+        "start": "অ্যাডভেঞ্চার শুরু করুন",
+        "error_short": "নাম কমপক্ষে ৩ অক্ষরের হতে হবে।",
+        "error_long": "নাম সর্বোচ্চ ২০ অক্ষরের হতে পারে।"
     }
 }

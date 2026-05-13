@@ -49,5 +49,75 @@
     "player": {
         "balance": "Guthaben: {amount}",
         "free_loots": "Verbleibende Gratisplünderungen: {count}"
+    },
+    "menu": {
+        "welcome": "Willkommen zurück, {nick}!",
+        "balance": "Guthaben: ${balance}",
+        "play": "Spielen",
+        "load_game": "Spiel laden",
+        "profile": "Profil",
+        "settings": "Einstellungen",
+        "quit": "Beenden"
+    },
+    "pause": {
+        "title": "PAUSIERT",
+        "resume": "Fortsetzen",
+        "save_game": "Spiel speichern",
+        "settings": "Einstellungen",
+        "main_menu": "Hauptmenü"
+    },
+    "settings": {
+        "title": "Einstellungen",
+        "tab_graphics": "Grafik",
+        "tab_audio": "Audio",
+        "tab_performance": "Leistung",
+        "tab_language": "Sprache",
+        "save": "Speichern",
+        "cancel": "Abbrechen",
+        "resolution": "Auflösung",
+        "fullscreen": "Vollbild",
+        "vsync": "VSync",
+        "msaa": "Kantenglättung",
+        "render_distance": "Sichtweite",
+        "master_volume": "Gesamtlautstärke",
+        "music_volume": "Musik",
+        "sfx_volume": "Effekte",
+        "muted": "Stumm",
+        "shadow_quality": "Schattenqualität",
+        "texture_quality": "Texturqualität",
+        "fps_limit": "FPS-Limit",
+        "fps_unlimited": "Unbegrenzt",
+        "saved": "Einstellungen gespeichert."
+    },
+    "profile": {
+        "title": "Profil",
+        "nick_label": "Spitzname",
+        "balance_label": "Guthaben",
+        "created_label": "Mitglied seit",
+        "playtime_label": "Gesamtspielzeit",
+        "save": "Änderungen speichern",
+        "saved": "Profil gespeichert.",
+        "back": "Zurück"
+    },
+    "saves": {
+        "title_load": "Spiel laden",
+        "title_save": "Spiel speichern",
+        "load": "Laden",
+        "save": "Speichern",
+        "delete": "Löschen",
+        "confirm_delete": "Diesen Spielstand löschen?",
+        "yes": "Ja",
+        "no": "Nein",
+        "save_name_placeholder": "Name des Spielstands...",
+        "no_saves": "Keine Spielstände gefunden.",
+        "saving": "Speichern...",
+        "saved": "Gespeichert!"
+    },
+    "new_profile": {
+        "title": "Wie heißt du, Schrottsammler?",
+        "placeholder": "Spitznamen eingeben...",
+        "start": "Abenteuer beginnen",
+        "error_short": "Der Name muss mindestens 3 Zeichen lang sein.",
+        "error_long": "Der Name darf höchstens 20 Zeichen lang sein."
     }
 }

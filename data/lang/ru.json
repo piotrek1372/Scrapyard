@@ -49,5 +49,75 @@
     "player": {
         "balance": "Баланс: {amount}",
         "free_loots": "Осталось бесплатных вылазок: {count}"
+    },
+    "menu": {
+        "welcome": "С возвращением, {nick}!",
+        "balance": "Баланс: ${balance}",
+        "play": "Играть",
+        "load_game": "Загрузить игру",
+        "profile": "Профиль",
+        "settings": "Настройки",
+        "quit": "Выход"
+    },
+    "pause": {
+        "title": "ПАУЗА",
+        "resume": "Продолжить",
+        "save_game": "Сохранить игру",
+        "settings": "Настройки",
+        "main_menu": "Главное меню"
+    },
+    "settings": {
+        "title": "Настройки",
+        "tab_graphics": "Графика",
+        "tab_audio": "Звук",
+        "tab_performance": "Производ-ность",
+        "tab_language": "Язык",
+        "save": "Сохранить",
+        "cancel": "Отмена",
+        "resolution": "Разрешение",
+        "fullscreen": "На весь экран",
+        "vsync": "Верт. синхронизация",
+        "msaa": "Сглаживание",
+        "render_distance": "Дальность прорисовки",
+        "master_volume": "Общая громкость",
+        "music_volume": "Музыка",
+        "sfx_volume": "Эффекты",
+        "muted": "Без звука",
+        "shadow_quality": "Качество теней",
+        "texture_quality": "Качество текстур",
+        "fps_limit": "Лимит FPS",
+        "fps_unlimited": "Без лимита",
+        "saved": "Настройки сохранены."
+    },
+    "profile": {
+        "title": "Профиль",
+        "nick_label": "Никнейм",
+        "balance_label": "Баланс",
+        "created_label": "В игре с",
+        "playtime_label": "Всего наиграно",
+        "save": "Сохранить изменения",
+        "saved": "Профиль сохранен.",
+        "back": "Назад"
+    },
+    "saves": {
+        "title_load": "Загрузить игру",
+        "title_save": "Сохранить игру",
+        "load": "Загрузить",
+        "save": "Сохранить",
+        "delete": "Удалить",
+        "confirm_delete": "Удалить это сохранение?",
+        "yes": "Да",
+        "no": "Нет",
+        "save_name_placeholder": "Название сохранения...",
+        "no_saves": "Сохранений не найдено.",
+        "saving": "Сохранение...",
+        "saved": "Сохранено!"
+    },
+    "new_profile": {
+        "title": "Как тебя звать, сборщик?",
+        "placeholder": "Введите ник...",
+        "start": "Начать приключение",
+        "error_short": "Имя должно содержать не менее 3 символов.",
+        "error_long": "Имя должно содержать не более 20 символов."
     }
 }

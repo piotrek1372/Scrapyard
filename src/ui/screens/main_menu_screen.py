@@ -130,7 +130,7 @@ class MainMenuScreen:
         ]
 
         y_start = 0.15
-        y_step = -0.18
+        y_step = -0.20
 
         for i, (key, cmd, bg, fg, scale) in enumerate(btn_specs):
             y = y_start + i * y_step
@@ -144,6 +144,7 @@ class MainMenuScreen:
                 relief="flat",
                 pressEffect=True,
                 text_align=TextNode.ACenter,
+                pad=(0.35, 0.18),
             )
             # Capture bg/hover for closure
             _bg = bg

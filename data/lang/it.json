@@ -49,5 +49,75 @@
     "player": {
         "balance": "Saldo: {amount}",
         "free_loots": "Saccheggi gratuiti rimanenti: {count}"
+    },
+    "menu": {
+        "welcome": "Bentornato, {nick}!",
+        "balance": "Saldo: ${balance}",
+        "play": "Gioca",
+        "load_game": "Carica partita",
+        "profile": "Profilo",
+        "settings": "Impostazioni",
+        "quit": "Esci"
+    },
+    "pause": {
+        "title": "PAUSA",
+        "resume": "Riprendi",
+        "save_game": "Salva partita",
+        "settings": "Impostazioni",
+        "main_menu": "Menu principale"
+    },
+    "settings": {
+        "title": "Impostazioni",
+        "tab_graphics": "Grafica",
+        "tab_audio": "Audio",
+        "tab_performance": "Prestazioni",
+        "tab_language": "Lingua",
+        "save": "Salva",
+        "cancel": "Annulla",
+        "resolution": "Risoluzione",
+        "fullscreen": "Schermo intero",
+        "vsync": "VSync",
+        "msaa": "Anti-Aliasing",
+        "render_distance": "Distanza di rendering",
+        "master_volume": "Volume principale",
+        "music_volume": "Musica",
+        "sfx_volume": "Effetti sonori",
+        "muted": "Muto",
+        "shadow_quality": "Qualità ombre",
+        "texture_quality": "Qualità texture",
+        "fps_limit": "Limite FPS",
+        "fps_unlimited": "Illimitato",
+        "saved": "Impostazioni salvate."
+    },
+    "profile": {
+        "title": "Profilo",
+        "nick_label": "Soprannome",
+        "balance_label": "Saldo",
+        "created_label": "Membro dal",
+        "playtime_label": "Tempo di gioco totale",
+        "save": "Salva modifiche",
+        "saved": "Profilo salvato.",
+        "back": "Indietro"
+    },
+    "saves": {
+        "title_load": "Carica partita",
+        "title_save": "Salva partita",
+        "load": "Carica",
+        "save": "Salva",
+        "delete": "Elimina",
+        "confirm_delete": "Eliminare questo salvataggio?",
+        "yes": "Sì",
+        "no": "No",
+        "save_name_placeholder": "Nome salvataggio...",
+        "no_saves": "Nessun salvataggio trovato.",
+        "saving": "Salvataggio...",
+        "saved": "Salvato!"
+    },
+    "new_profile": {
+        "title": "Come ti chiami, rottamatore?",
+        "placeholder": "Inserisci il soprannome...",
+        "start": "Inizia l'avventura",
+        "error_short": "Il nome deve contenere almeno 3 caratteri.",
+        "error_long": "Il nome deve contenere al massimo 20 caratteri."
     }
 }

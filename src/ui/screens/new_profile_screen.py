@@ -112,6 +112,7 @@ class NewProfileScreen:
             relief="flat",
             pressEffect=True,
             text_align=TextNode.ACenter,
+            pad=(0.40, 0.20),
         )
         btn.bind("enter", lambda _: self._animate_hover(btn, True))
         btn.bind("exit",  lambda _: self._animate_hover(btn, False))

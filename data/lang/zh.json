@@ -49,5 +49,75 @@
     "player": {
         "balance": "余额：{amount}",
         "free_loots": "剩余免费搜刮次数：{count}"
+    },
+    "menu": {
+        "welcome": "欢迎回来，{nick}！",
+        "balance": "余额：${balance}",
+        "play": "开始游戏",
+        "load_game": "加载游戏",
+        "profile": "个人资料",
+        "settings": "设置",
+        "quit": "退出"
+    },
+    "pause": {
+        "title": "已暂停",
+        "resume": "继续",
+        "save_game": "保存游戏",
+        "settings": "设置",
+        "main_menu": "主菜单"
+    },
+    "settings": {
+        "title": "设置",
+        "tab_graphics": "图形",
+        "tab_audio": "音频",
+        "tab_performance": "性能",
+        "tab_language": "语言",
+        "save": "保存",
+        "cancel": "取消",
+        "resolution": "分辨率",
+        "fullscreen": "全屏",
+        "vsync": "垂直同步",
+        "msaa": "抗锯齿",
+        "render_distance": "渲染距离",
+        "master_volume": "主音量",
+        "music_volume": "音乐",
+        "sfx_volume": "音效",
+        "muted": "静音",
+        "shadow_quality": "阴影质量",
+        "texture_quality": "纹理质量",
+        "fps_limit": "FPS 限制",
+        "fps_unlimited": "无限制",
+        "saved": "设置已保存。"
+    },
+    "profile": {
+        "title": "个人资料",
+        "nick_label": "昵称",
+        "balance_label": "余额",
+        "created_label": "加入时间",
+        "playtime_label": "总游戏时间",
+        "save": "保存更改",
+        "saved": "个人资料已保存。",
+        "back": "返回"
+    },
+    "saves": {
+        "title_load": "加载游戏",
+        "title_save": "保存游戏",
+        "load": "加载",
+        "save": "保存",
+        "delete": "删除",
+        "confirm_delete": "确认删除此存档？",
+        "yes": "是",
+        "no": "否",
+        "save_name_placeholder": "存档名称...",
+        "no_saves": "未找到存档。",
+        "saving": "保存中...",
+        "saved": "已保存！"
+    },
+    "new_profile": {
+        "title": "你叫什么名字，拾荒者？",
+        "placeholder": "输入昵称...",
+        "start": "开始冒险",
+        "error_short": "名称必须至少 3 个字符。",
+        "error_long": "名称最多 20 个字符。"
     }
 }

@@ -49,5 +49,75 @@
     "player": {
         "balance": "Solde : {amount}",
         "free_loots": "Pillages gratuits restants : {count}"
+    },
+    "menu": {
+        "welcome": "Bon retour, {nick}!",
+        "balance": "Solde : ${balance}",
+        "play": "Jouer",
+        "load_game": "Charger la partie",
+        "profile": "Profil",
+        "settings": "Paramètres",
+        "quit": "Quitter"
+    },
+    "pause": {
+        "title": "PAUSE",
+        "resume": "Reprendre",
+        "save_game": "Sauvegarder",
+        "settings": "Paramètres",
+        "main_menu": "Menu principal"
+    },
+    "settings": {
+        "title": "Paramètres",
+        "tab_graphics": "Graphismes",
+        "tab_audio": "Audio",
+        "tab_performance": "Performances",
+        "tab_language": "Langue",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "resolution": "Résolution",
+        "fullscreen": "Plein écran",
+        "vsync": "VSync",
+        "msaa": "Anticrénelage",
+        "render_distance": "Distance d'affichage",
+        "master_volume": "Volume principal",
+        "music_volume": "Musique",
+        "sfx_volume": "Effets sonores",
+        "muted": "Muet",
+        "shadow_quality": "Qualité des ombres",
+        "texture_quality": "Qualité des textures",
+        "fps_limit": "Limite de FPS",
+        "fps_unlimited": "Illimité",
+        "saved": "Paramètres enregistrés."
+    },
+    "profile": {
+        "title": "Profil",
+        "nick_label": "Pseudo",
+        "balance_label": "Solde",
+        "created_label": "Membre depuis",
+        "playtime_label": "Temps de jeu total",
+        "save": "Enregistrer",
+        "saved": "Profil enregistré.",
+        "back": "Retour"
+    },
+    "saves": {
+        "title_load": "Charger la partie",
+        "title_save": "Sauvegarder la partie",
+        "load": "Charger",
+        "save": "Sauvegarder",
+        "delete": "Supprimer",
+        "confirm_delete": "Supprimer cette sauvegarde ?",
+        "yes": "Oui",
+        "no": "Non",
+        "save_name_placeholder": "Nom de la sauvegarde...",
+        "no_saves": "Aucune sauvegarde trouvée.",
+        "saving": "Sauvegarde en cours...",
+        "saved": "Sauvegardé !"
+    },
+    "new_profile": {
+        "title": "Comment tu t'appelles, ferrailleur ?",
+        "placeholder": "Entrez votre pseudo...",
+        "start": "Commencer l'aventure",
+        "error_short": "Le nom doit comporter au moins 3 caractères.",
+        "error_long": "Le nom doit comporter au maximum 20 caractères."
     }
 }

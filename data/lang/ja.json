@@ -49,5 +49,75 @@
     "player": {
         "balance": "残高：{amount}",
         "free_loots": "残りの無料ルート：{count}"
+    },
+    "menu": {
+        "welcome": "お帰りなさい、{nick}！",
+        "balance": "残高: ${balance}",
+        "play": "プレイ",
+        "load_game": "ロード",
+        "profile": "プロフィール",
+        "settings": "設定",
+        "quit": "終了"
+    },
+    "pause": {
+        "title": "一時停止",
+        "resume": "再開",
+        "save_game": "セーブ",
+        "settings": "設定",
+        "main_menu": "メインメニュー"
+    },
+    "settings": {
+        "title": "設定",
+        "tab_graphics": "グラフィック",
+        "tab_audio": "オーディオ",
+        "tab_performance": "パフォーマンス",
+        "tab_language": "言語",
+        "save": "保存",
+        "cancel": "キャンセル",
+        "resolution": "解像度",
+        "fullscreen": "フルスクリーン",
+        "vsync": "垂直同期",
+        "msaa": "アンチエイリアス",
+        "render_distance": "描画距離",
+        "master_volume": "マスター音量",
+        "music_volume": "音楽",
+        "sfx_volume": "SE",
+        "muted": "ミュート",
+        "shadow_quality": "影の品質",
+        "texture_quality": "テクスチャの品質",
+        "fps_limit": "FPS上限",
+        "fps_unlimited": "無制限",
+        "saved": "設定を保存しました。"
+    },
+    "profile": {
+        "title": "プロフィール",
+        "nick_label": "ニックネーム",
+        "balance_label": "残高",
+        "created_label": "参加日",
+        "playtime_label": "総プレイ時間",
+        "save": "変更を保存",
+        "saved": "プロフィールを保存しました。",
+        "back": "戻る"
+    },
+    "saves": {
+        "title_load": "ゲームをロード",
+        "title_save": "ゲームをセーブ",
+        "load": "ロード",
+        "save": "セーブ",
+        "delete": "削除",
+        "confirm_delete": "このセーブデータを削除しますか？",
+        "yes": "はい",
+        "no": "いいえ",
+        "save_name_placeholder": "セーブデータ名...",
+        "no_saves": "セーブデータがありません。",
+        "saving": "保存中...",
+        "saved": "保存しました！"
+    },
+    "new_profile": {
+        "title": "君の名前は？スクラッパー。",
+        "placeholder": "ニックネームを入力...",
+        "start": "冒険を始める",
+        "error_short": "名前は3文字以上である必要があります。",
+        "error_long": "名前は20文字以内である必要があります。"
     }
 }

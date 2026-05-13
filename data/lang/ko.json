@@ -49,5 +49,75 @@
     "player": {
         "balance": "잔액: {amount}",
         "free_loots": "남은 무료 루팅: {count}"
+    },
+    "menu": {
+        "welcome": "돌아온 것을 환영합니다, {nick}!",
+        "balance": "잔고: ${balance}",
+        "play": "플레이",
+        "load_game": "게임 불러오기",
+        "profile": "프로필",
+        "settings": "설정",
+        "quit": "종료"
+    },
+    "pause": {
+        "title": "일시 정지",
+        "resume": "계속",
+        "save_game": "게임 저장",
+        "settings": "설정",
+        "main_menu": "메인 메뉴"
+    },
+    "settings": {
+        "title": "설정",
+        "tab_graphics": "그래픽",
+        "tab_audio": "오디오",
+        "tab_performance": "성능",
+        "tab_language": "언어",
+        "save": "저장",
+        "cancel": "취소",
+        "resolution": "해상도",
+        "fullscreen": "전체 화면",
+        "vsync": "수직 동기화",
+        "msaa": "안티앨리어싱",
+        "render_distance": "렌더링 거리",
+        "master_volume": "마스터 볼륨",
+        "music_volume": "음악",
+        "sfx_volume": "효과음",
+        "muted": "음소거",
+        "shadow_quality": "그림자 품질",
+        "texture_quality": "텍스처 품질",
+        "fps_limit": "FPS 제한",
+        "fps_unlimited": "제한 없음",
+        "saved": "설정이 저장되었습니다."
+    },
+    "profile": {
+        "title": "프로필",
+        "nick_label": "닉네임",
+        "balance_label": "잔고",
+        "created_label": "가입일",
+        "playtime_label": "총 플레이 시간",
+        "save": "변경 사항 저장",
+        "saved": "프로필이 저장되었습니다.",
+        "back": "뒤로"
+    },
+    "saves": {
+        "title_load": "게임 불러오기",
+        "title_save": "게임 저장",
+        "load": "불러오기",
+        "save": "저장",
+        "delete": "삭제",
+        "confirm_delete": "이 저장 데이터를 삭제하시겠습니까?",
+        "yes": "예",
+        "no": "아니요",
+        "save_name_placeholder": "저장 이름...",
+        "no_saves": "저장 데이터가 없습니다.",
+        "saving": "저장 중...",
+        "saved": "저장되었습니다!"
+    },
+    "new_profile": {
+        "title": "이름이 뭡니까, 수집가?",
+        "placeholder": "닉네임 입력...",
+        "start": "모험 시작",
+        "error_short": "이름은 3자 이상이어야 합니다.",
+        "error_long": "이름은 최대 20자까지만 가능합니다."
     }
 }

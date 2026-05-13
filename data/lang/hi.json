@@ -49,5 +49,75 @@
     "player": {
         "balance": "बैलेंस: {amount}",
         "free_loots": "शेष मुफ्त लूट: {count}"
+    },
+    "menu": {
+        "welcome": "वापसी पर स्वागत है, {nick}!",
+        "balance": "बैलेंस: ${balance}",
+        "play": "खेलें",
+        "load_game": "गेम लोड करें",
+        "profile": "प्रोफ़ाइल",
+        "settings": "सेटिंग्स",
+        "quit": "बाहर निकलें"
+    },
+    "pause": {
+        "title": "रोका गया",
+        "resume": "फिर से शुरू करें",
+        "save_game": "गेम सहेजें",
+        "settings": "सेटिंग्स",
+        "main_menu": "मुख्य मेनू"
+    },
+    "settings": {
+        "title": "सेटिंग्स",
+        "tab_graphics": "ग्राफ़िक्स",
+        "tab_audio": "ऑडियो",
+        "tab_performance": "प्रदर्शन",
+        "tab_language": "भाषा",
+        "save": "सहेजें",
+        "cancel": "रद्द करें",
+        "resolution": "रिज़ॉल्यूशन",
+        "fullscreen": "पूर्ण स्क्रीन",
+        "vsync": "VSync",
+        "msaa": "एंटी-अलियासिंग",
+        "render_distance": "रेंडर दूरी",
+        "master_volume": "मुख्य आवाज़",
+        "music_volume": "संगीत",
+        "sfx_volume": "प्रभाव",
+        "muted": "म्यूट",
+        "shadow_quality": "छाया की गुणवत्ता",
+        "texture_quality": "बनावट की गुणवत्ता",
+        "fps_limit": "FPS सीमा",
+        "fps_unlimited": "असीमित",
+        "saved": "सेटिंग्स सहेजी गईं।"
+    },
+    "profile": {
+        "title": "प्रोफ़ाइल",
+        "nick_label": "उपनाम",
+        "balance_label": "बैलेंस",
+        "created_label": "सदस्यता की शुरुआत",
+        "playtime_label": "कुल खेल का समय",
+        "save": "परिवर्तन सहेजें",
+        "saved": "प्रोफ़ाइल सहेजी गई।",
+        "back": "वापस"
+    },
+    "saves": {
+        "title_load": "गेम लोड करें",
+        "title_save": "गेम सहेजें",
+        "load": "लोड करें",
+        "save": "सहेजें",
+        "delete": "हटाएं",
+        "confirm_delete": "क्या यह सेव हटाएं?",
+        "yes": "हां",
+        "no": "नहीं",
+        "save_name_placeholder": "सेव का नाम...",
+        "no_saves": "कोई सेव नहीं मिला।",
+        "saving": "सहेज रहा है...",
+        "saved": "सहेजा गया!"
+    },
+    "new_profile": {
+        "title": "तुम्हारा नाम क्या है, कबाड़ी?",
+        "placeholder": "उपनाम दर्ज करें...",
+        "start": "रोमांच शुरू करें",
+        "error_short": "नाम कम से कम 3 वर्णों का होना चाहिए।",
+        "error_long": "नाम अधिकतम 20 वर्णों का हो सकता है।"
     }
 }

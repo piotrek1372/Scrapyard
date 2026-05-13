@@ -93,6 +93,14 @@ class ScrapyardApp(ShowBase):
         # ── Fonts ─────────────────────────────────────────────────────
         self._setup_fonts()
 
+        # ── PBR rendering — must be initialized once per process ──────
+        # simplepbr.init() creates a FilterManager that cannot be
+        # re-created in the same window. Initialize here, not in
+        # start_game(), to survive multiple play/cleanup cycles.
+        if HAS_SIMPLEPBR:
+            simplepbr.init()
+            logger.info("simplepbr initialized.")
+
         # ── Profile & saves ───────────────────────────────────────────
         self._profile: Profile | None = ProfileManager.load()
         path_mgr = PathManager()
@@ -106,7 +114,6 @@ class ScrapyardApp(ShowBase):
         self.skybox_manager = None
         self.terrain_manager = None
         self.fpv_controller = None
-        self._hud = None
         self._world_active: bool = False
 
         # ── Screen handles ────────────────────────────────────────────
@@ -218,10 +225,6 @@ class ScrapyardApp(ShowBase):
 
         logger.info("Initializing 3D world…")
 
-        # Apply PBR now (must happen after ShowBase is up)
-        if HAS_SIMPLEPBR:
-            simplepbr.init()
-
         self.setBackgroundColor(0.08, 0.08, 0.10, 1.0)
         self.setFrameRateMeter(True)
 
@@ -230,7 +233,6 @@ class ScrapyardApp(ShowBase):
         from src.core.skybox import SkyboxManager
         from src.core.terrain import TerrainManager
         from src.core.fpv_controller import FPVController
-        from src.ui.hud import HUD
 
         self.env_manager = EnvironmentManager(self)
         self.skybox_manager = SkyboxManager(self)
@@ -244,8 +246,6 @@ class ScrapyardApp(ShowBase):
         self.fpv_controller = FPVController(
             self, start_pos=LVector3(0, 0, 5), bounds=_bounds
         )
-
-        self._hud = HUD(self)
 
         # ── Main update task ──────────────────────────────────────────
         self.taskMgr.add(
@@ -297,14 +297,6 @@ class ScrapyardApp(ShowBase):
                 except AttributeError:
                     pass
                 setattr(self, attr, None)
-
-        # Destroy HUD
-        if self._hud is not None:
-            try:
-                self._hud.clear()
-            except Exception:
-                pass
-            self._hud = None
 
         # Restore background
         self.setBackgroundColor(0.06, 0.05, 0.05, 1.0)
@@ -358,25 +350,59 @@ class ScrapyardApp(ShowBase):
     # ── Font setup ────────────────────────────────────────────────────────
 
     def _setup_fonts(self) -> None:
-        """Sets up a unicode-capable font for Polish and other scripts."""
+        """Loads system fonts for all supported scripts.
+
+        Populates ``self.script_fonts`` with DynamicTextFont objects keyed by
+        script name.  Latin/Cyrillic is set as the global DirectGui default.
+        Script-specific fonts (CJK, Arabic, Indic) are used per-widget in the
+        language selection screen so each language name renders in its own
+        native typeface.
+
+        Font selection (Windows built-ins, no external download needed):
+            latin      → Arial              (Latin, Cyrillic, Greek)
+            cjk_zh     → SimSun             (Simplified Chinese)
+            cjk_ja     → Meiryo             (Japanese, also covers CJK)
+            cjk_ko     → Malgun Gothic      (Korean)
+            arabic     → Tahoma             (Arabic, Hebrew)
+            devanagari → Mangal             (Hindi / Devanagari)
+            bengali    → Vrinda             (Bengali)
+        """
         from panda3d.core import TextProperties
         from direct.gui import DirectGuiGlobals as DGG
 
-        font_path = (
-            Filename.fromOsSpecific(
-                r"C:\Windows\Fonts\arial.ttf"
-            ).getFullpath()
-            if sys.platform == "win32"
-            else "Arial.ttf"
-        )
-        try:
-            font = self.loader.loadFont(font_path)
-            if font:
-                font.setPixelsPerUnit(60)
-                TextProperties.setDefaultFont(font)
-                DGG.setDefaultFont(font)
-        except Exception as exc:
-            logger.error("Could not load system font: %s", exc)
+        # Script key → Windows font path
+        _WIN_FONTS: dict[str, str] = {
+            "latin":      r"C:\Windows\Fonts\arial.ttf",
+            "cjk_zh":     r"C:\Windows\Fonts\simsun.ttc",
+            # Yu Gothic R — Japanese CJK (Meiryo absent on this machine)
+            "cjk_ja":     r"C:\Windows\Fonts\YuGothR.ttc",
+            "cjk_ko":     r"C:\Windows\Fonts\malgun.ttf",
+            "arabic":     r"C:\Windows\Fonts\tahoma.ttf",
+            # Nirmala UI — covers Devanagari (Hindi) + Bengali
+            "devanagari": r"C:\Windows\Fonts\Nirmala.ttc",
+            "bengali":    r"C:\Windows\Fonts\Nirmala.ttc",
+        }
+
+        self.script_fonts: dict[str, object] = {}
+
+        for script, path in _WIN_FONTS.items():
+            try:
+                font = self.loader.loadFont(
+                    Filename.fromOsSpecific(path).getFullpath()
+                )
+                if font:
+                    font.setPixelsPerUnit(60)
+                    self.script_fonts[script] = font
+                    logger.info("Font loaded: %s → %s", script, path)
+            except Exception as exc:
+                logger.warning("Font unavailable (%s): %s", script, exc)
+
+        # Latin/Cyrillic as global default for all DirectGui widgets
+        latin_font = self.script_fonts.get("latin")
+        if latin_font:
+            TextProperties.setDefaultFont(latin_font)
+            DGG.setDefaultFont(latin_font)
+
 
     # ── Main update task ──────────────────────────────────────────────────
 

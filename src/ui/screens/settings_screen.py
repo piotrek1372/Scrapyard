@@ -22,7 +22,6 @@ from direct.gui.DirectGui import (
 from panda3d.core import TextNode
 
 from src.utils.i18n import t
-from src.utils.i18n import SUPPORTED_LANGUAGES
 
 
 logger = logging.getLogger("Scrapyard.UI.Settings")
@@ -105,6 +104,7 @@ class SettingsScreen:
                 text_fg=_WORN_TEXT,
                 relief="flat",
                 text_align=TextNode.ACenter,
+                pad=(0.20, 0.12),
             )
             self._tab_buttons[tab_key] = btn
             self._elements.append(btn)
@@ -148,6 +148,7 @@ class SettingsScreen:
             relief="flat",
             pressEffect=True,
             text_align=TextNode.ACenter,
+            pad=(0.30, 0.15),
         )
         self._elements.append(save_btn)
 
@@ -161,6 +162,7 @@ class SettingsScreen:
             relief="flat",
             pressEffect=True,
             text_align=TextNode.ACenter,
+            pad=(0.30, 0.15),
         )
         self._elements.append(cancel_btn)
 
@@ -225,13 +227,12 @@ class SettingsScreen:
 
         # VSync
         y -= 0.14
-        vsync_val = [1 if cfg.get("graphics.vsync") else 0]
         cb = DirectCheckButton(
             parent=panel,
             text="",
             scale=0.06,
             pos=(0.15, 0, y),
-            isChecked=cfg.get("graphics.vsync", True),
+            indicatorValue=1 if cfg.get("graphics.vsync", True) else 0,
             frameColor=_PLATE_DIM,
             text_fg=_DIRT_TEXT,
             command=lambda v: self._pending.__setitem__("graphics.vsync", bool(v)),
@@ -323,7 +324,7 @@ class SettingsScreen:
             text="",
             scale=0.06,
             pos=(0.15, 0, y),
-            isChecked=cfg.get("audio.muted", False),
+            indicatorValue=1 if cfg.get("audio.muted", False) else 0,
             frameColor=_PLATE_DIM,
             command=lambda v: self._pending.__setitem__("audio.muted", bool(v)),
         )
@@ -408,50 +409,117 @@ class SettingsScreen:
         self._row(panel, "fps_limit", y, menu3)
 
     def _populate_language(self, panel) -> None:
-        """Builds the language selection tab content."""
-        # Human-readable display names for each language code
-        _LANG_NAMES = {
-            "en": "English",  "zh": "中文",   "hi": "हिन्दी",
-            "es": "Español",  "ar": "العربية", "bn": "বাংলা",
-            "pt": "Português","ja": "日本語",  "ko": "한국어",
-            "de": "Deutsch",  "fr": "Français","it": "Italiano",
-            "tr": "Türkçe",   "ru": "Русский", "pl": "Polski",
-        }
-        curr_lang = self.app.i18n.get_language()
-        lang_items = [
-            f"{code} — {_LANG_NAMES.get(code, code)}"
-            for code in SUPPORTED_LANGUAGES
-        ]
-        curr_item = f"{curr_lang} — {_LANG_NAMES.get(curr_lang, curr_lang)}"
-        if curr_item not in lang_items:
-            curr_item = lang_items[0]
+        """Builds the language selection grid.
 
-        y = 0.20
-        lbl = DirectLabel(
+        Renders each language name using its native script font
+        (CJK, Arabic, Devanagari, Bengali, or Latin/Cyrillic).
+        Selection is tracked in ``self._selected_lang`` and highlighted
+        with the rust accent color.
+        """
+        # Ordered list: (code, native name, script key)
+        _LANGS = [
+            ("pl", "Polski",    "latin"),
+            ("en", "English",   "latin"),
+            ("de", "Deutsch",   "latin"),
+            ("fr", "Français",  "latin"),
+            ("es", "Español",   "latin"),
+            ("it", "Italiano",  "latin"),
+            ("pt", "Português", "latin"),
+            ("ru", "Русский",   "latin"),
+            ("tr", "Türkçe",    "latin"),
+            ("ar", "العربية",   "arabic"),
+            ("zh", "中文",      "cjk_zh"),
+            ("ja", "日本語",    "cjk_ja"),
+            ("ko", "한국어",    "cjk_ko"),
+            ("hi", "हिन्दी",   "devanagari"),
+            ("bn", "বাংলা",   "bengali"),
+        ]
+
+        script_fonts = getattr(self.app, "script_fonts", {})
+        curr_lang = self.app.i18n.get_language()
+        self._selected_lang: str = curr_lang
+        self._lang_buttons: dict[str, object] = {}
+
+        # ── Section label ──────────────────────────────────────────────
+        from direct.gui.DirectGui import DirectLabel
+        from panda3d.core import TextNode as _TN
+        from src.utils.rtl import prepare_rtl
+
+        DirectLabel(
             parent=panel,
             text=t("settings.tab_language"),
-            scale=0.065,
-            pos=(-0.60, 0, y + 0.14),
+            scale=0.058,
+            pos=(-0.72, 0, 0.44),
             text_fg=_DIRT_TEXT,
             frameColor=(0, 0, 0, 0),
-            text_align=TextNode.ALeft,
+            text_align=_TN.ALeft,
         )
-        self._elements.append(lbl)
 
-        menu = DirectOptionMenu(
-            parent=panel,
-            scale=0.058,
-            items=lang_items,
-            initialitem=lang_items.index(curr_item),
-            pos=(0, 0, y),
-            frameColor=_PLATE_DIM,
-            text_fg=_DIRT_TEXT,
-            highlightColor=_RUST,
-            command=lambda v: self._pending.__setitem__(
-                "language", v.split(" — ")[0]
-            ),
-        )
-        self._elements.append(menu)
+        # ── 3-column grid ──────────────────────────────────────────────
+        cols = 3
+        col_w = 0.55
+        row_h = 0.16
+        x_start = -0.70
+        y_start = 0.30
+
+        for idx, (code, name, script) in enumerate(_LANGS):
+            col = idx % cols
+            row = idx // cols
+            x = x_start + col * col_w
+            y = y_start - row * row_h
+
+            font = script_fonts.get(script) or script_fonts.get("latin")
+            is_selected = (code == curr_lang)
+            bg = _RUST if is_selected else _PLATE_DIM
+            fg = _DIRT_TEXT
+
+            # RTL languages (Arabic, etc.): reshape + BiDi reorder the string
+            # so Panda3D renders it correctly. After prepare_rtl() the string
+            # is in VISUAL order — a plain LTR renderer sees it correctly.
+            # ARight is WRONG here (shifts frame anchor); use ACenter like
+            # every other button in the grid.
+            is_rtl = script in ("arabic",)
+            display_name = prepare_rtl(name) if is_rtl else name
+
+            btn = DirectButton(
+                parent=panel,
+                text=display_name,
+                scale=0.058,
+                pos=(x, 0, y),
+                command=self._on_lang_select,
+                extraArgs=[code],
+                frameColor=bg,
+                text_fg=fg,
+                relief="flat",
+                pressEffect=True,
+                text_align=_TN.ACenter,
+                pad=(0.18, 0.10),
+                **({"text_font": font} if font else {}),
+            )
+            self._lang_buttons[code] = btn
+            self._elements.append(btn)
+
+
+
+    def _on_lang_select(self, code: str) -> None:
+        """Handles a language button click: updates highlight and pending.
+
+        Args:
+            code: ISO 639-1 language code of the selected language.
+        """
+        # De-highlight previous selection
+        prev = self._lang_buttons.get(self._selected_lang)
+        if prev is not None:
+            prev["frameColor"] = _PLATE_DIM
+
+        # Highlight new selection
+        btn = self._lang_buttons.get(code)
+        if btn is not None:
+            btn["frameColor"] = _RUST
+
+        self._selected_lang = code
+        self._pending["language"] = code
+
 
     # ── Tab switching ─────────────────────────────────────────────────────
 

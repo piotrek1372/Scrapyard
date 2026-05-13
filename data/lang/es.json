@@ -49,5 +49,75 @@
     "player": {
         "balance": "Saldo: {amount}",
         "free_loots": "Saqueos gratuitos restantes: {count}"
+    },
+    "menu": {
+        "welcome": "¡Bienvenido de nuevo, {nick}!",
+        "balance": "Saldo: ${balance}",
+        "play": "Jugar",
+        "load_game": "Cargar partida",
+        "profile": "Perfil",
+        "settings": "Ajustes",
+        "quit": "Salir"
+    },
+    "pause": {
+        "title": "PAUSA",
+        "resume": "Reanudar",
+        "save_game": "Guardar partida",
+        "settings": "Ajustes",
+        "main_menu": "Menú principal"
+    },
+    "settings": {
+        "title": "Ajustes",
+        "tab_graphics": "Gráficos",
+        "tab_audio": "Audio",
+        "tab_performance": "Rendimiento",
+        "tab_language": "Idioma",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "resolution": "Resolución",
+        "fullscreen": "Pantalla completa",
+        "vsync": "VSync",
+        "msaa": "Suavizado",
+        "render_distance": "Distancia de dibujado",
+        "master_volume": "Volumen maestro",
+        "music_volume": "Música",
+        "sfx_volume": "Efectos",
+        "muted": "Silenciado",
+        "shadow_quality": "Calidad de sombras",
+        "texture_quality": "Calidad de texturas",
+        "fps_limit": "Límite de FPS",
+        "fps_unlimited": "Ilimitado",
+        "saved": "Ajustes guardados."
+    },
+    "profile": {
+        "title": "Perfil",
+        "nick_label": "Apodo",
+        "balance_label": "Saldo",
+        "created_label": "Miembro desde",
+        "playtime_label": "Tiempo total jugado",
+        "save": "Guardar cambios",
+        "saved": "Perfil guardado.",
+        "back": "Volver"
+    },
+    "saves": {
+        "title_load": "Cargar partida",
+        "title_save": "Guardar partida",
+        "load": "Cargar",
+        "save": "Guardar",
+        "delete": "Eliminar",
+        "confirm_delete": "¿Eliminar esta partida?",
+        "yes": "Sí",
+        "no": "No",
+        "save_name_placeholder": "Nombre de la partida...",
+        "no_saves": "No se encontraron partidas.",
+        "saving": "Guardando...",
+        "saved": "¡Guardado!"
+    },
+    "new_profile": {
+        "title": "¿Cómo te llamas, chatarrero?",
+        "placeholder": "Introduce tu apodo...",
+        "start": "Comenzar aventura",
+        "error_short": "El nombre debe tener al menos 3 caracteres.",
+        "error_long": "El nombre debe tener como máximo 20 caracteres."
     }
 }

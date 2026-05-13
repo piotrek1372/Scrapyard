@@ -67,7 +67,7 @@ class PauseScreen:
         panel = DirectFrame(
             parent=backdrop,
             frameColor=_PLATE,
-            frameSize=(-0.52, 0.52, -0.56, 0.52),
+            frameSize=(-0.58, 0.58, -0.62, 0.52),
             pos=(0, 0, 0),
         )
         self._elements.append(panel)
@@ -118,6 +118,7 @@ class PauseScreen:
                 relief="flat",
                 pressEffect=True,
                 text_align=TextNode.ACenter,
+                pad=(0.35, 0.18),
             )
             _bg = bg
             _hover = (
