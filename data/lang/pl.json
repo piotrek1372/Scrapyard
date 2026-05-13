@@ -18,6 +18,76 @@
         "language": "Język: {lang}",
         "quit": "Wyjdź"
     },
+    "menu": {
+        "welcome": "Witaj z powrotem, {nick}!",
+        "balance": "Saldo: ${balance}",
+        "play": "Graj",
+        "load_game": "Wczytaj grę",
+        "profile": "Profil",
+        "settings": "Ustawienia",
+        "quit": "Wyjdź"
+    },
+    "pause": {
+        "title": "PAUZA",
+        "resume": "Wznów",
+        "save_game": "Zapisz grę",
+        "settings": "Ustawienia",
+        "main_menu": "Menu główne"
+    },
+    "settings": {
+        "title": "Ustawienia",
+        "tab_graphics": "Grafika",
+        "tab_audio": "Dźwięk",
+        "tab_performance": "Wydajność",
+        "tab_language": "Język",
+        "save": "Zapisz",
+        "cancel": "Anuluj",
+        "resolution": "Rozdzielczość",
+        "fullscreen": "Pełny ekran",
+        "vsync": "VSync",
+        "msaa": "Antyaliasing",
+        "render_distance": "Zasięg renderowania",
+        "master_volume": "Głośność główna",
+        "music_volume": "Muzyka",
+        "sfx_volume": "Efekty dźwiękowe",
+        "muted": "Wycisz",
+        "shadow_quality": "Jakość cieni",
+        "texture_quality": "Jakość tekstur",
+        "fps_limit": "Limit FPS",
+        "fps_unlimited": "Bez limitu",
+        "saved": "Ustawienia zapisane."
+    },
+    "profile": {
+        "title": "Profil",
+        "nick_label": "Nick",
+        "balance_label": "Saldo",
+        "created_label": "Dołączył(a)",
+        "playtime_label": "Łączny czas gry",
+        "save": "Zapisz zmiany",
+        "saved": "Profil zapisany.",
+        "back": "Powrót"
+    },
+    "saves": {
+        "title_load": "Wczytaj grę",
+        "title_save": "Zapisz grę",
+        "load": "Wczytaj",
+        "save": "Zapisz",
+        "delete": "Usuń",
+        "confirm_delete": "Usunąć ten zapis?",
+        "yes": "Tak",
+        "no": "Nie",
+        "save_name_placeholder": "Nazwa zapisu...",
+        "no_saves": "Brak zapisów.",
+        "saving": "Zapisywanie...",
+        "saved": "Zapisano!"
+    },
+    "new_profile": {
+        "title": "Jak masz na imię, złomiarzu?",
+        "placeholder": "Wpisz nick...",
+        "start": "Zacznij przygodę",
+        "error_short": "Nick musi mieć co najmniej 3 znaki.",
+        "error_long": "Nick może mieć maksymalnie 20 znaków."
+    },
     "items": {
         "Rusty Radiator": "Zardzewiała chłodnica",
         "Seized Piston": "Zatarty tłok",

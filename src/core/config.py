@@ -18,11 +18,28 @@ class Config:
     DEFAULT_SETTINGS = {
         "graphics": {
             "resolution": [1280, 720],
+            "fullscreen": False,
             "vsync": True,
             "msaa": 4,
             "render_distance": 15,
-            "chunk_update_threshold": 2
-        }
+            "chunk_update_threshold": 2,
+        },
+        "audio": {
+            "master_volume": 1.0,
+            "music_volume": 0.7,
+            "sfx_volume": 1.0,
+            "muted": False,
+        },
+        "performance": {
+            # "off" | "low" | "medium" | "high"
+            "shadow_quality": "medium",
+            # "low" | "medium" | "high"
+            "texture_quality": "high",
+            # 0 = unlimited
+            "fps_limit": 0,
+        },
+        # "auto" detects system locale via i18n; or explicit code e.g. "pl"
+        "language": "auto",
     }
     
     def __init__(self) -> None:

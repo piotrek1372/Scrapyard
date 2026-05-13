@@ -1,7 +1,7 @@
 {
     "game": {
         "title": "Scrapyard",
-        "overlooking": "--- Overlooking scrapyard ---"
+        "overlooking": "--- Overlooking the scrapyard ---"
     },
     "loot": {
         "found": "You found: {name} | Model: {model}",
@@ -17,6 +17,76 @@
         "no_model": "[No 3D model]",
         "language": "Language: {lang}",
         "quit": "Quit"
+    },
+    "menu": {
+        "welcome": "Welcome back, {nick}!",
+        "balance": "Balance: ${balance}",
+        "play": "Play",
+        "load_game": "Load Game",
+        "profile": "Profile",
+        "settings": "Settings",
+        "quit": "Quit"
+    },
+    "pause": {
+        "title": "PAUSED",
+        "resume": "Resume",
+        "save_game": "Save Game",
+        "settings": "Settings",
+        "main_menu": "Main Menu"
+    },
+    "settings": {
+        "title": "Settings",
+        "tab_graphics": "Graphics",
+        "tab_audio": "Audio",
+        "tab_performance": "Performance",
+        "tab_language": "Language",
+        "save": "Save",
+        "cancel": "Cancel",
+        "resolution": "Resolution",
+        "fullscreen": "Fullscreen",
+        "vsync": "VSync",
+        "msaa": "Anti-Aliasing",
+        "render_distance": "Render Distance",
+        "master_volume": "Master Volume",
+        "music_volume": "Music",
+        "sfx_volume": "Sound FX",
+        "muted": "Muted",
+        "shadow_quality": "Shadow Quality",
+        "texture_quality": "Texture Quality",
+        "fps_limit": "FPS Limit",
+        "fps_unlimited": "Unlimited",
+        "saved": "Settings saved."
+    },
+    "profile": {
+        "title": "Profile",
+        "nick_label": "Nickname",
+        "balance_label": "Balance",
+        "created_label": "Member since",
+        "playtime_label": "Total playtime",
+        "save": "Save Changes",
+        "saved": "Profile saved.",
+        "back": "Back"
+    },
+    "saves": {
+        "title_load": "Load Game",
+        "title_save": "Save Game",
+        "load": "Load",
+        "save": "Save",
+        "delete": "Delete",
+        "confirm_delete": "Delete this save?",
+        "yes": "Yes",
+        "no": "No",
+        "save_name_placeholder": "Save name...",
+        "no_saves": "No saves found.",
+        "saving": "Saving...",
+        "saved": "Saved!"
+    },
+    "new_profile": {
+        "title": "What's your name, scrapper?",
+        "placeholder": "Enter nickname...",
+        "start": "Start Adventure",
+        "error_short": "Name must be at least 3 characters.",
+        "error_long": "Name must be at most 20 characters."
     },
     "items": {
         "Rusty Radiator": "Rusty Radiator",

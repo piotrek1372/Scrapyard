@@ -183,9 +183,11 @@ class FPVController:
         for event, (action, state) in bindings.items():
             self.base.accept(event, self._set_key, [action, state])
 
-        # Escape releases the cursor; left-click re-captures it.
-        self.base.accept("escape", self.set_input_mode, [False])
-        self.base.accept("mouse1", self.set_input_mode, [True])
+        # Escape triggers the pause screen via app.pause().
+        self.base.accept("escape", self._on_escape)
+        # Mouse1 re-locks the cursor when clicked in the game world.
+        self.base.accept("mouse1", self._on_mouse1_click)
+
 
     def _set_key(self, action: str, state: bool) -> None:
         """Update a single boolean field on InputState.
@@ -360,3 +362,50 @@ class FPVController:
             Vec3 position of the player node.
         """
         return self.player_np.getPos()
+
+    def pause(self) -> None:
+        """Freezes FPV input and releases the mouse cursor.
+
+        Called by ScrapyardApp.pause() before showing the pause overlay.
+        """
+        self.set_input_mode(locked=False)
+        self.base.taskMgr.remove("fpv_update_task")
+        logger.debug("FPVController paused.")
+
+    def resume(self) -> None:
+        """Restores FPV input and re-locks the mouse cursor.
+
+        Called by ScrapyardApp.resume() after dismissing the pause overlay.
+        """
+        # Restart the update task (sort=10, same as constructor)
+        self.base.taskMgr.add(
+            self._update_task, "fpv_update_task", sort=10
+        )
+        self.set_input_mode(locked=True)
+        logger.debug("FPVController resumed.")
+
+    # ── Private event handlers ────────────────────────────────────────────
+
+    def _on_escape(self) -> None:
+        """Handles the Escape key: delegates pause to ScrapyardApp.
+
+        ScrapyardApp.pause() handles state validation, overlay display,
+        and cursor release — FPVController must not decide whether to pause.
+        """
+        pause_fn = getattr(self.base, "pause", None)
+        if callable(pause_fn):
+            pause_fn()
+        else:
+            # Fallback if called outside of ScrapyardApp context
+            self.set_input_mode(locked=False)
+
+    def _on_mouse1_click(self) -> None:
+        """Re-locks the cursor on left-click, but only during PLAYING state.
+
+        Prevents accidentally capturing the mouse while interacting with
+        the pause overlay or other GUI elements.
+        """
+        from src.core.game_state import GameState
+        state_mgr = getattr(self.base, "state_manager", None)
+        if state_mgr is not None and state_mgr.is_in(GameState.PLAYING):
+            self.set_input_mode(locked=True)

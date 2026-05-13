@@ -20,7 +20,7 @@ class Launcher(ShowBase):
     def __init__(self, config: Config):
         # Use a temporary window for the launcher
         ShowBase.__init__(self)
-        self.config = config
+        self.game_config = config
         self.confirmed = False
         
         # Window setup
@@ -111,14 +111,15 @@ class Launcher(ShowBase):
         # Parse resolution
         res_str = self.res_menu.get()
         w, h = map(int, res_str.split('x'))
-        self.config.set("graphics.resolution", [w, h])
+        self.game_config.set("graphics.resolution", [w, h])
         
         # Parse distance
         dist = int(self.dist_menu.get())
-        self.config.set("graphics.render_distance", dist)
+        self.game_config.set("graphics.render_distance", dist)
         
-        self.config.save()
+        self.game_config.save()
         self.confirmed = True
+        self.taskMgr.stop()
         self.destroy() # Close Panda3D window
 
 def run_launcher(config: Config) -> bool:
