@@ -137,7 +137,7 @@ class I18n:
             except (KeyError, IndexError):
                 pass
 
-        return result
+        return self._apply_bidi(result)
 
     def t_item(self, english_name: str) -> str:
         """Translates an item name from its English base name.
@@ -150,13 +150,13 @@ class I18n:
         """
         items = self._resolve_key("items", self._translations)
         if isinstance(items, dict) and english_name in items:
-            return items[english_name]
+            return self._apply_bidi(items[english_name])
 
         items_fb = self._resolve_key("items", self._fallback)
         if isinstance(items_fb, dict) and english_name in items_fb:
-            return items_fb[english_name]
+            return self._apply_bidi(items_fb[english_name])
 
-        return english_name
+        return self._apply_bidi(english_name)
 
     def t_category(self, english_category: str) -> str:
         """Translates a category name from its English base name.
@@ -169,13 +169,13 @@ class I18n:
         """
         cats = self._resolve_key("categories", self._translations)
         if isinstance(cats, dict) and english_category in cats:
-            return cats[english_category]
+            return self._apply_bidi(cats[english_category])
 
         cats_fb = self._resolve_key("categories", self._fallback)
         if isinstance(cats_fb, dict) and english_category in cats_fb:
-            return cats_fb[english_category]
+            return self._apply_bidi(cats_fb[english_category])
 
-        return english_category
+        return self._apply_bidi(english_category)
 
     @staticmethod
     def _resolve_key(key: str, data: dict):
@@ -199,6 +199,24 @@ class I18n:
             else:
                 return None
         return current
+
+    def _apply_bidi(self, text: str) -> str:
+        """Applies RTL layout and Arabic shaping if needed.
+
+        Args:
+            text: Original translated string.
+
+        Returns:
+            Properly shaped and reversed string for display.
+        """
+        if self._current_lang == "ar":
+            try:
+                import arabic_reshaper
+                from bidi.algorithm import get_display
+                return get_display(arabic_reshaper.reshape(text))
+            except ImportError:
+                pass
+        return text
 
 
 # ── Global convenience functions ──────────────────────────────────────────

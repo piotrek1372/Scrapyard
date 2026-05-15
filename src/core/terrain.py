@@ -17,6 +17,7 @@ from panda3d.core import (
     CollisionNode,
     CollisionPlane,
     Geom,
+    Shader,
     GeomNode,
     GeomTristrips,
     GeomVertexData,
@@ -119,6 +120,7 @@ class TerrainChunk:
         self.is_island = is_island
         self.manager = manager
         self.models: List[NodePath] = []
+        self.grass_nodes: List[NodePath] = []
         self.spawned_positions: List[Tuple[float, float]] = []
         
         # Calculate island boundaries in world coordinates for heightmap blending.
@@ -151,6 +153,7 @@ class TerrainChunk:
             self._create_terrain_skirts()
             if tile_paths:
                 self._spawn_tile_models(tile_paths)
+            self._spawn_grass()
         else:
             # Water path: lightweight flat quad; no heightmap allocation.
             self.img = None
@@ -158,6 +161,7 @@ class TerrainChunk:
             self.root = NodePath(f"water_chunk_{cx}_{cy}")
             self.root.setPos(cx * size, cy * size, 0)
             self._create_water_quad()
+            self._create_sea_floor()
 
         self.is_visible = False
         
@@ -175,8 +179,8 @@ class TerrainChunk:
           - Horizontal span equals self.size (8 world-units per edge)
           - setTwoSided makes each quad visible from both faces.
         """
-        DEPTH: float = 0.15        # local z; × 20 = 3 world-units below water
-        DIRT = (0.47, 0.40, 0.28, 1.0)  # mid-point of procedural dirt palette
+        DEPTH: float = 0.5         # local z; × 20 = 10 world-units (deep abyss)
+        DIRT = (0.05, 0.04, 0.03, 1.0)  # deep murky mud color
         sz: float = float(self.size)
 
         def _wall(name: str, pos_xyz, heading: float) -> None:
@@ -195,10 +199,15 @@ class TerrainChunk:
 
         # CardMaker default: quad in XZ plane facing +Y.
         # H rotates around Z: 0°=+Y, 90°=+X, 180°=-Y, -90°/-270°=-X.
-        _wall("skirt_s", (0.0, 0.0, 0.0),  0.0)    # south edge y=0,  face +Y
-        _wall("skirt_n", (sz,  sz,  0.0), 180.0)   # north edge y=sz, face -Y
-        _wall("skirt_w", (0.0, sz,  0.0),  90.0)   # west  edge x=0,  face +X
-        _wall("skirt_e", (sz,  0.0, 0.0), -90.0)   # east  edge x=sz, face -X
+        # Only create walls on edges that border WATER to remove internal chunk strips.
+        if (self.cx, self.cy - 1) not in ISLAND_CHUNKS:
+            _wall("skirt_s", (0.0, 0.0, 0.0),  0.0)    # south edge y=0,  face +Y
+        if (self.cx, self.cy + 1) not in ISLAND_CHUNKS:
+            _wall("skirt_n", (sz,  sz,  0.0), 180.0)   # north edge y=sz, face -Y
+        if (self.cx - 1, self.cy) not in ISLAND_CHUNKS:
+            _wall("skirt_w", (0.0, sz,  0.0),  90.0)   # west  edge x=0,  face +X
+        if (self.cx + 1, self.cy) not in ISLAND_CHUNKS:
+            _wall("skirt_e", (sz,  0.0, 0.0), -90.0)   # east  edge x=sz, face -X
 
         # Bottom cap — flat quad at local z = -DEPTH.
         cm_bot = CardMaker(f"skirt_bot_{self.cx}_{self.cy}")
@@ -207,7 +216,7 @@ class TerrainChunk:
         bot_np.setP(-90.0)          # rotate XZ card → XY plane (flat)
         bot_np.setZ(-DEPTH)
         bot_np.setTwoSided(True)
-        bot_np.setColor(*DIRT)
+        bot_np.setColor(0.02, 0.02, 0.02, 1.0) # Black bottom
         bot_np.setShaderOff()
         bot_np.setMaterialOff()
         bot_np.setLightOff()
@@ -272,10 +281,16 @@ class TerrainChunk:
         mesh_np.setTwoSided(True)
         mesh_np.setTexture(tex)
         mesh_np.setTexScale(TextureStage.getDefault(), 4.0, 4.0)
+        
+        # Add a detail stage for high-frequency grit/dirt
+        ts_detail = TextureStage("detail")
+        ts_detail.setMode(TextureStage.M_modulate)
+        mesh_np.setTexture(ts_detail, tex)
+        mesh_np.setTexScale(ts_detail, 32.0, 32.0)
         mesh_np.setShaderOff()
         mesh_np.setMaterialOff()
         mesh_np.setLightOff()
-        mesh_np.setColor(0.47, 0.40, 0.28, 1.0)
+        mesh_np.setColor(0.3, 0.25, 0.18, 1.0) # Even darker, more saturated dirt
         mesh_np.setTransparency(TransparencyAttrib.MNone)
         # DepthOffset shifts the terrain's depth-buffer value slightly toward
         # the camera (equivalent to glPolygonOffset(-1, -1)).  At the shoreline,
@@ -387,6 +402,63 @@ class TerrainChunk:
             "Chunk (%d, %d): spawned %d tile models.", self.cx, self.cy, n_models
         )
 
+    def _spawn_grass(self) -> None:
+        """Spawn 15-30 grass billboards on island chunks.
+        
+        Density is higher on green 'grass' patches (determined by the same 
+        noise as the ground texture).
+        """
+        rng = random.Random(self.cx * 982451653 ^ self.cy * 123456789)
+        n_grass = rng.randint(15, 30)
+        
+        grass_tex = self.manager.grass_texture if self.manager else None
+        if not grass_tex:
+            return
+
+        for _ in range(n_grass):
+            lx = rng.uniform(0, self.size)
+            ly = rng.uniform(0, self.size)
+            
+            # Use same noise logic as texture to find green spots
+            nx = lx / self.size
+            ny = ly / self.size
+            v_grass = math.sin(nx * 4.2 + 0.5) * math.cos(ny * 3.7 + 1.2)
+            
+            # If not a green spot, lower chance of spawning
+            if v_grass <= 0.15 and rng.random() > 0.2:
+                continue
+
+            px, py = int(lx), int(ly)
+            gray = self.img.get_gray(px, py)
+            world_z = gray * self._HEIGHT_SCALE
+            
+            # Create a simple X-quad (two crossed planes)
+            grass_root = self.root.attachNewNode("grass_tuft")
+            cm = CardMaker("grass_card")
+            cm.setFrame(-0.5, 0.5, 0, 1.0)
+            
+            # Plane 1
+            p1 = grass_root.attachNewNode(cm.generate())
+            # Plane 2 (rotated 90 deg)
+            p2 = grass_root.attachNewNode(cm.generate())
+            p2.setH(90)
+            
+            grass_root.setPos(lx, ly, gray) # local z
+            # COMPENSATE for parent _HEIGHT_SCALE=20.0
+            # Target world size: width ~0.5, height ~0.3
+            s_w = rng.uniform(0.4, 0.8)
+            s_h = rng.uniform(0.25, 0.45) / self._HEIGHT_SCALE
+            grass_root.setScale(s_w, s_w, s_h)
+            grass_root.setH(rng.uniform(0, 360))
+            
+            grass_root.setTexture(grass_tex)
+            grass_root.setTransparency(TransparencyAttrib.MAlpha)
+            grass_root.setTwoSided(True)
+            grass_root.setShaderOff()
+            grass_root.setLightOff()
+            
+            self.grass_nodes.append(grass_root)
+
     def _generate_heightmap(self) -> None:
         """Fill self.img with a procedural heightmap and call generate().
 
@@ -415,19 +487,26 @@ class TerrainChunk:
                 dist_to_edge = min(dist_x, dist_y)
                 
                 # Mask is 1.0 inland, smoothstep only on the edges.
+                # Shifted down slightly to ensure shoreline is 'under' Z=0
                 if dist_to_edge >= MARGIN:
                     mask = 1.0
                 else:
                     t = dist_to_edge / MARGIN
                     mask = t * t * (3.0 - 2.0 * t)
                 
-                self.img.set_gray(x, y, 0.15 * mask)
+                # Height in [ -0.02, 0.15 ] to avoid the white 'gap' at Z=0
+                self.img.set_gray(x, y, 0.15 * mask - 0.01)
 
         self.terrain.setHeightfield(self.img)
         self.terrain.setBlockSize(self.size)   # Must precede generate().
         self.terrain.setNear(self.size * 2)    # LOD near distance.
         self.terrain.setFar(self.size * 4)     # LOD far distance.
         self.terrain.generate()
+        
+        # Physically detach all engine-generated gray geometry nodes.
+        # We replace them entirely with our custom textured mesh in _build_terrain_mesh.
+        for gn in self.terrain.getRoot().findAllMatches("**/+GeomNode"):
+            gn.detachNode()
         # Diagnostic: log geom count to confirm geometry was produced.
         root = self.terrain.getRoot()
         for gn in root.findAllMatches("**/+GeomNode"):
@@ -438,33 +517,90 @@ class TerrainChunk:
             )
 
     def _create_water_quad(self) -> None:
-        """Attach a horizontal coloured quad to self.root for water chunks.
-
-        CardMaker produces a card in the XZ plane; a -90° pitch rotation
-        lays it flat in the XY plane.  The quad exactly covers the chunk
-        footprint so adjacent water tiles are seamlessly tiled.
-
-        Render-state overrides applied (all inherited from simplepbr / render):
-          setShaderOff()   — strips the PBR shader so fixed-function setColor() works.
-          setMaterialOff() — prevents PBR material from replacing vertex colour.
-          setLightOff()    — prevents PBR lighting from darkening the unlit surface.
-          setFogOff()      — water ignores scene fog; colour is stable at all distances.
-                             Without this, the brownish fog (density 0.015) dominates
-                             at ~50 units and the water reads as brown, not blue.
+        """Build a subdivided mesh for water to allow vertex-based waves.
+        
+        Uses a regular grid of vertices (17x17 for size 16) and applies
+         the custom water shader from TerrainManager.
         """
-        cm = CardMaker(f"water_quad_{self.cx}_{self.cy}")
-        # setFrame(left, right, bottom, top) in the card's local XZ plane.
-        cm.setFrame(0.0, float(self.size), 0.0, float(self.size))
-        quad_np: NodePath = self.root.attachNewNode(cm.generate())
-        # Rotate to lie flat (XZ → XY).
-        quad_np.setP(-90.0)
-        quad_np.setColor(*self._WATER_COLOR)
-        quad_np.setShaderOff()    # strip simplepbr PBR shader
-        quad_np.setMaterialOff()  # prevent PBR material override
-        quad_np.setLightOff()     # flat surface — no lighting needed
-        quad_np.setFogOff()       # stable colour regardless of view distance
+        res = 16 # vertices per chunk edge
+        n = res + 1
+        fmt = GeomVertexFormat.getV3n3t2()
+        vdata = GeomVertexData(f"water_{self.cx}_{self.cy}", fmt, Geom.UHStatic)
+        vdata.setNumRows(n * n)
+
+        vwriter = GeomVertexWriter(vdata, "vertex")
+        twriter = GeomVertexWriter(vdata, "texcoord")
+
+        scale = float(self.size)
+        for y in range(n):
+            for x in range(n):
+                # Local XY goes 0..size
+                vwriter.addData3f(x * (scale/res), y * (scale/res), 0.0)
+                twriter.addData2f(x / float(res), y / float(res))
+
+        prim = GeomTristrips(Geom.UHStatic)
+        for row in range(res):
+            for col in range(n):
+                prim.addVertex(row * n + col)
+                prim.addVertex((row + 1) * n + col)
+            prim.closePrimitive()
+
+        geom = Geom(vdata)
+        geom.addPrimitive(prim)
+        gnode = GeomNode(f"water_mesh_{self.cx}_{self.cy}")
+        gnode.addGeom(geom)
+
+        water_np: NodePath = self.root.attachNewNode(gnode)
+        water_np.setTwoSided(True)
+        
+        if self.manager and self.manager.water_shader:
+            water_np.setShader(self.manager.water_shader)
+        else:
+            water_np.setColor(*self._WATER_COLOR)
+            water_np.setShaderOff()
+            
+        water_np.setMaterialOff()
+        water_np.setLightOff() # Shader handles its own 'lighting'
+        water_np.setFogOff()
 
     def get_height(self, local_x: float, local_y: float) -> float:
+        """Return world-space terrain height at chunk-local coordinates.
+
+        Returns 0.0 immediately for water chunks (no heightmap available).
+        For island chunks, samples the GeoMipTerrain heightfield and
+        scales it by _HEIGHT_SCALE (20.0).
+        """
+        if not hasattr(self, "terrain"):
+            return 0.0
+
+        # local_x, local_y in [0, size] -> indices in [0, size]
+        px: int = int(max(0, min(self.size, local_x)))
+        py: int = int(max(0, min(self.size, local_y)))
+        gray: float = self.img.get_gray(px, py)
+        return gray * self._HEIGHT_SCALE
+
+    def _create_sea_floor(self) -> None:
+        """Add a flat textured quad below the water to act as sea floor.
+        
+        This prevents the background fog from being visible through the gap
+        created when waves move the water surface upwards.
+        """
+        sz: float = float(self.size)
+        cm = CardMaker(f"sea_floor_{self.cx}_{self.cy}")
+        cm.setFrame(0.0, sz, 0.0, sz)
+        floor_np: NodePath = self.root.attachNewNode(cm.generate())
+        floor_np.setP(-90.0) # Flatten to XY plane
+        # Place it slightly below the deepest possible wave trough
+        floor_np.setZ(-1.5) # ~1.5 units deep
+        
+        if self.manager:
+            floor_np.setTexture(self.manager.ground_texture)
+            floor_np.setTexScale(TextureStage.getDefault(), 4.0, 4.0)
+            
+        floor_np.setShaderOff()
+        floor_np.setMaterialOff()
+        floor_np.setLightOff()
+        floor_np.setColor(0.2, 0.15, 0.1, 1.0) # Dark muddy tone
         """Return world-space terrain height at chunk-local coordinates.
 
         Returns 0.0 immediately for water chunks (no heightmap available).
@@ -500,6 +636,8 @@ class TerrainChunk:
             self.root.detachNode()
             for model in self.models:
                 model.detachNode()
+            for g in self.grass_nodes:
+                g.detachNode()
             self.is_visible = False
 
     def destroy(self) -> None:
@@ -508,6 +646,9 @@ class TerrainChunk:
         for model in self.models:
             model.removeNode()
         self.models.clear()
+        for g in self.grass_nodes:
+            g.removeNode()
+        self.grass_nodes.clear()
         
         if self.manager:
             for pos in self.spawned_positions:
@@ -545,9 +686,17 @@ class TerrainManager:
         self.last_chunk_pos = (999, 999) # Force initial update
         
         self.terrain_root = self.render.attachNewNode("terrain_root")
+        
+        # Load custom shaders
+        self.water_shader = Shader.load(
+            Shader.SL_GLSL,
+            "shaders/water.vert",
+            "shaders/water.frag"
+        )
 
         # Build the shared procedural ground texture (one GPU upload for all chunks).
         self.ground_texture: Texture = self._build_ground_texture()
+        self.grass_texture: Texture = self._build_grass_texture()
 
         # Place hard collision walls around the island perimeter.
         self._setup_island_walls()
@@ -691,11 +840,18 @@ class TerrainManager:
                 v3 = (
                     math.sin(nx * 55.2 + 2.1) * math.cos(ny * 53.9 + 1.8) * 0.20
                 )
+                # Layer 4: Low-frequency "biome" noise for grass patches
+                v_grass = math.sin(nx * 4.2 + 0.5) * math.cos(ny * 3.7 + 1.2)
+
                 # Combine layers; map (-1, 1) → (0, 1) then clamp.
                 val: float = max(0.0, min(1.0, (v1 + v2 + v3 + 1.0) * 0.5))
 
-                # Brownish-grey dirt palette.
-                img.setXel(x, y, 0.38 + val * 0.18, 0.33 + val * 0.13, 0.24 + val * 0.08)
+                if v_grass > 0.15:
+                    # Muted olive/grass palette (Scrapyard style)
+                    img.setXel(x, y, 0.28 + val * 0.12, 0.34 + val * 0.14, 0.18 + val * 0.06)
+                else:
+                    # Classic brownish-grey dirt palette.
+                    img.setXel(x, y, 0.38 + val * 0.18, 0.33 + val * 0.13, 0.24 + val * 0.08)
 
         tex = Texture("ground_dirt")
         tex.load(img)
@@ -705,6 +861,38 @@ class TerrainManager:
         tex.setWrapV(SamplerState.WM_repeat)
 
         logger.info("Ground texture generated: %d\u00d7%d px (procedural dirt).", size, size)
+        return tex
+
+    def _build_grass_texture(self) -> Texture:
+        """Generate a procedural grass blade texture (64x64 RGBA)."""
+        size = 64
+        img = PNMImage(size, size, 4)
+        img.fill(0, 0, 0) # Fill RGB with black
+        img.alpha_fill(0) # Fill alpha with 0 (transparent)
+        
+        for i in range(12): # Draw 12 blades of grass
+            bx = random.uniform(10, 54)
+            width = random.uniform(2, 5)
+            height = random.uniform(30, 60)
+            
+            # Simple blade: triangle-ish
+            for y in range(int(size - height), size):
+                # Normalized y from bottom (0) to top (1)
+                ty = (size - y) / height
+                curr_w = width * (1.0 - ty * 0.8) # Taper at top
+                start_x = int(bx - curr_w / 2)
+                end_x = int(bx + curr_w / 2)
+                for x in range(start_x, end_x + 1):
+                    if 0 <= x < size:
+                        # Color: dark green base to bright yellow-green tip
+                        brightness = 0.5 + ty * 0.5
+                        img.setXel(x, y, 0.05 * brightness, (0.2 + ty * 0.5) * brightness, 0.02)
+                        img.setAlpha(x, y, 1.0)
+                        
+        tex = Texture("grass_billboard")
+        tex.load(img)
+        tex.setMagfilter(SamplerState.FT_linear)
+        tex.setMinfilter(SamplerState.FT_linear_mipmap_linear)
         return tex
 
     def _setup_island_walls(self) -> None:

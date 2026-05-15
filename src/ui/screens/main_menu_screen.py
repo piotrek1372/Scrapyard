@@ -69,16 +69,6 @@ class MainMenuScreen:
         )
         self._elements.append(title)
 
-        # ── Tagline / subtitle ────────────────────────────────────────
-        subtitle = OnscreenText(
-            text=t("game.overlooking"),
-            pos=(0, 0.60),
-            scale=0.048,
-            fg=_WORN_TEXT,
-            align=TextNode.ACenter,
-            mayChange=False,
-        )
-        self._elements.append(subtitle)
 
         # ── Divider line (fake — thin dark panel) ─────────────────────
         divider = DirectFrame(
@@ -122,29 +112,30 @@ class MainMenuScreen:
 
         # ── Navigation buttons ────────────────────────────────────────
         btn_specs = [
-            ("menu.play",      self._on_play,      _RUST,      _DIRT_TEXT, 0.085),
-            ("menu.load_game", self._on_load,       _PLATE,     _DIRT_TEXT, 0.070),
-            ("menu.profile",   self._on_profile,    _PLATE,     _WORN_TEXT, 0.065),
-            ("menu.settings",  self._on_settings,   _PLATE,     _WORN_TEXT, 0.065),
-            ("menu.quit",      self._on_quit,       _PLATE_DIM, _WORN_TEXT, 0.060),
+            ("menu.play",      self._on_play,      _RUST,      _DIRT_TEXT),
+            ("menu.load_game", self._on_load,       _PLATE,     _DIRT_TEXT),
+            ("menu.profile",   self._on_profile,    _PLATE,     _WORN_TEXT),
+            ("menu.settings",  self._on_settings,   _PLATE,     _WORN_TEXT),
+            ("menu.quit",      self._on_quit,       _PLATE_DIM, _WORN_TEXT),
         ]
 
         y_start = 0.15
-        y_step = -0.20
+        y_step = -0.18
 
-        for i, (key, cmd, bg, fg, scale) in enumerate(btn_specs):
+        for i, (key, cmd, bg, fg) in enumerate(btn_specs):
             y = y_start + i * y_step
             btn = DirectButton(
                 text=t(key),
-                scale=scale,
+                scale=0.06,
                 pos=(0, 0, y),
                 command=cmd,
                 frameColor=bg,
+                frameSize=(-4.5, 4.5, -1.0, 1.3),
                 text_fg=fg,
                 relief="flat",
                 pressEffect=True,
                 text_align=TextNode.ACenter,
-                pad=(0.35, 0.18),
+                pad=(0.4, 0.1),
             )
             # Capture bg/hover for closure
             _bg = bg

@@ -96,29 +96,30 @@ class PauseScreen:
 
         # ── Buttons ───────────────────────────────────────────────────
         btn_specs = [
-            ("pause.resume",    self._on_resume,      _RUST,    _DIRT_TEXT, 0.080),
-            ("pause.save_game", self._on_save_game,   _PLATE,   _DIRT_TEXT, 0.068),
-            ("pause.settings",  self._on_settings,    _PLATE,   _WORN_TEXT, 0.065),
-            ("pause.main_menu", self._on_main_menu,   _RED_EXIT,_DIRT_TEXT, 0.065),
+            ("pause.resume",    self._on_resume,      _RUST,    _DIRT_TEXT),
+            ("pause.save_game", self._on_save_game,   _PLATE,   _DIRT_TEXT),
+            ("pause.settings",  self._on_settings,    _PLATE,   _WORN_TEXT),
+            ("pause.main_menu", self._on_main_menu,   _RED_EXIT,_DIRT_TEXT),
         ]
 
-        y_start = 0.14
-        y_step = -0.19
+        y_start = 0.15
+        y_step = -0.18
 
-        for i, (key, cmd, bg, fg, scale) in enumerate(btn_specs):
+        for i, (key, cmd, bg, fg) in enumerate(btn_specs):
             y = y_start + i * y_step
             btn = DirectButton(
                 parent=panel,
                 text=t(key),
-                scale=scale,
+                scale=0.06,
                 pos=(0, 0, y),
                 command=cmd,
                 frameColor=bg,
+                frameSize=(-4.5, 4.5, -1.0, 1.3),
                 text_fg=fg,
                 relief="flat",
                 pressEffect=True,
                 text_align=TextNode.ACenter,
-                pad=(0.35, 0.18),
+                pad=(0.4, 0.1),
             )
             _bg = bg
             _hover = (

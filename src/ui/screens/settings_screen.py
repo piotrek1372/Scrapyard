@@ -140,29 +140,31 @@ class SettingsScreen:
         # ── Save / Cancel buttons ─────────────────────────────────────
         save_btn = DirectButton(
             text=t("settings.save"),
-            scale=0.068,
-            pos=(-0.22, 0, -0.84),
+            scale=0.06,
+            pos=(-0.32, 0, -0.84),
             command=self._on_save,
             frameColor=_RUST,
+            frameSize=(-4.5, 4.5, -1.0, 1.3),
             text_fg=_DIRT_TEXT,
             relief="flat",
             pressEffect=True,
             text_align=TextNode.ACenter,
-            pad=(0.30, 0.15),
+            pad=(0.4, 0.1),
         )
         self._elements.append(save_btn)
-
+ 
         cancel_btn = DirectButton(
             text=t("settings.cancel"),
-            scale=0.068,
-            pos=(0.22, 0, -0.84),
+            scale=0.06,
+            pos=(0.32, 0, -0.84),
             command=self._on_cancel,
             frameColor=_PLATE_DIM,
+            frameSize=(-4.5, 4.5, -1.0, 1.3),
             text_fg=_WORN_TEXT,
             relief="flat",
             pressEffect=True,
             text_align=TextNode.ACenter,
-            pad=(0.30, 0.15),
+            pad=(0.4, 0.1),
         )
         self._elements.append(cancel_btn)
 
