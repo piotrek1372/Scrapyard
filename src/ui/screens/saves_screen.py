@@ -119,14 +119,16 @@ class SavesScreen:
 
             save_btn = DirectButton(
                 text=t("saves.save"),
-                scale=0.065,
-                pos=(0.52, 0, 0.68),
+                scale=0.06,
+                pos=(0.50, 0, 0.68),
                 command=self._on_create_save,
                 frameColor=_RUST,
+                frameSize=(-4.5, 4.5, -1.0, 1.3),
                 text_fg=_DIRT_TEXT,
                 relief="flat",
                 pressEffect=True,
                 text_align=TextNode.ACenter,
+                pad=(0.4, 0.1),
             )
             self._elements.append(save_btn)
 
@@ -184,14 +186,16 @@ class SavesScreen:
         return_to = "main_menu" if self.mode == "load" else "pause"
         back_btn = DirectButton(
             text=t(back_label),
-            scale=0.065,
+            scale=0.06,
             pos=(0, 0, -0.86),
             command=lambda: self.app._show_screen(return_to),
             frameColor=_PLATE_DIM,
+            frameSize=(-4.5, 4.5, -1.0, 1.3),
             text_fg=_WORN_TEXT,
             relief="flat",
             pressEffect=True,
             text_align=TextNode.ACenter,
+            pad=(0.4, 0.1),
         )
         self._elements.append(back_btn)
 
@@ -255,30 +259,34 @@ class SavesScreen:
             action_btn = DirectButton(
                 parent=card,
                 text=t("saves.load"),
-                scale=0.055,
+                scale=0.04,
                 pos=(0.65, 0, 0.03),
                 command=self._on_load,
                 extraArgs=[save_meta.id],
                 frameColor=_RUST,
+                frameSize=(-3.5, 3.5, -1.0, 1.3),
                 text_fg=_DIRT_TEXT,
                 relief="flat",
                 pressEffect=True,
                 text_align=TextNode.ACenter,
+                pad=(0.3, 0.1),
             )
 
         # Delete button (always)
         del_btn = DirectButton(
             parent=card,
             text=t("saves.delete"),
-            scale=0.048,
+            scale=0.04,
             pos=(0.65, 0, -0.05),
             command=self._on_delete_request,
             extraArgs=[save_meta.id],
             frameColor=_RED_DEL,
+            frameSize=(-3.5, 3.5, -1.0, 1.3),
             text_fg=_DIRT_TEXT,
             relief="flat",
             pressEffect=True,
             text_align=TextNode.ACenter,
+            pad=(0.3, 0.1),
         )
 
         return card
@@ -351,25 +359,29 @@ class SavesScreen:
         DirectButton(
             parent=panel,
             text=t("saves.yes"),
-            scale=0.065,
+            scale=0.04,
             pos=(-0.18, 0, -0.07),
             command=self._on_delete_confirm,
             extraArgs=[save_id],
             frameColor=_RED_DEL,
+            frameSize=(-3.5, 3.5, -1.0, 1.3),
             text_fg=_DIRT_TEXT,
             relief="flat",
             pressEffect=True,
+            pad=(0.3, 0.1),
         )
         DirectButton(
             parent=panel,
             text=t("saves.no"),
-            scale=0.065,
+            scale=0.04,
             pos=(0.18, 0, -0.07),
             command=self._dismiss_confirm,
             frameColor=_PLATE_DIM,
+            frameSize=(-3.5, 3.5, -1.0, 1.3),
             text_fg=_WORN_TEXT,
             relief="flat",
             pressEffect=True,
+            pad=(0.3, 0.1),
         )
 
     def _on_delete_confirm(self, save_id: str) -> None:

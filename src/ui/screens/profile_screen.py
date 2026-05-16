@@ -134,13 +134,15 @@ class ProfileScreen:
         self._edit_btn = DirectButton(
             parent=card,
             text="[ Edit ]",
-            scale=0.045,
+            scale=0.04,
             pos=(0.40, 0, y),
             command=self._on_edit_click,
             frameColor=(0, 0, 0, 0),
+            frameSize=(-3.5, 3.5, -1.0, 1.3),
             text_fg=_AMBER,
             relief="flat",
             pressEffect=True,
+            pad=(0.3, 0.1),
         )
         self._elements.append(self._edit_btn)
 
@@ -195,28 +197,32 @@ class ProfileScreen:
         # Save button
         save_btn = DirectButton(
             text=t("profile.save"),
-            scale=0.072,
-            pos=(-0.18, 0, -0.72),
+            scale=0.06,
+            pos=(-0.24, 0, -0.72),
             command=self._on_save,
             frameColor=_RUST,
+            frameSize=(-4.5, 4.5, -1.0, 1.3),
             text_fg=_DIRT_TEXT,
             relief="flat",
             pressEffect=True,
             text_align=TextNode.ACenter,
+            pad=(0.4, 0.1),
         )
         self._elements.append(save_btn)
 
         # Back button
         back_btn = DirectButton(
             text=t("profile.back"),
-            scale=0.065,
-            pos=(0.30, 0, -0.72),
+            scale=0.06,
+            pos=(0.24, 0, -0.72),
             command=self._on_back,
             frameColor=_PLATE_DIM,
+            frameSize=(-4.5, 4.5, -1.0, 1.3),
             text_fg=_WORN_TEXT,
             relief="flat",
             pressEffect=True,
             text_align=TextNode.ACenter,
+            pad=(0.4, 0.1),
         )
         self._elements.append(back_btn)
 
